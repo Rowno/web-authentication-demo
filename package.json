@@ -1,0 +1,58 @@
+{
+  "name": "web-authentication",
+  "version": "0.0.0",
+  "description": "Project description.",
+  "author": "Roland Warmerdam (https://roland.codes)",
+  "repository": "Rowno/web-authentication",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "lint": "eslint '**/*.{js,jsx,ts,tsx}'",
+    "build": "next build",
+    "start": "next start",
+    "dev": "next"
+  },
+  "engines": {
+    "node": "^10"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "next": "^9.0.7",
+    "react": "^16.10.1",
+    "react-dom": "^16.10.1"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.141",
+    "@types/node": "^10",
+    "@types/react": "^16.9.4",
+    "@types/react-dom": "^16.9.1",
+    "@typescript-eslint/eslint-plugin": "^2.3.1",
+    "@typescript-eslint/parser": "^2.3.1",
+    "eslint": "^6.4.0",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-config-xo": "^0.27.1",
+    "eslint-config-xo-typescript": "^0.19.0",
+    "prettier": "^1.18.2",
+    "typescript": "^3.6.3"
+  },
+  "eslintIgnore": [
+    "/.next/"
+  ],
+  "eslintConfig": {
+    "extends": [
+      "xo/esnext",
+      "xo-typescript",
+      "prettier",
+      "prettier/@typescript-eslint"
+    ],
+    "env": {
+      "node": true,
+      "browser": true
+    }
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 120
+  }
+}
