@@ -16,12 +16,18 @@
     "node": "^10"
   },
   "dependencies": {
+    "@github/webauthn-json": "^0.3.6",
+    "base64url": "^3.0.1",
+    "cbor": "^5.0.1",
+    "ioredis": "^4.14.1",
     "lodash": "^4.17.15",
     "next": "^9.0.7",
     "react": "^16.10.1",
     "react-dom": "^16.10.1"
   },
   "devDependencies": {
+    "@types/cbor": "^2.0.0",
+    "@types/ioredis": "^4.0.18",
     "@types/lodash": "^4.14.141",
     "@types/node": "^10",
     "@types/react": "^16.9.4",
