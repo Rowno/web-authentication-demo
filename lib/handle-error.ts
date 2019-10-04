@@ -6,7 +6,7 @@ export default (func: (req: NextApiRequest, res: NextApiResponse) => Promise<voi
       await func(req, res)
     } catch (error) {
       console.error(error)
-      res.statusCode = 500
+      res.status(500)
       res.json({ error: error.message })
     }
   }

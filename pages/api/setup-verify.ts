@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import crypto from 'crypto'
 import { get } from 'lodash'
 import base64url from 'base64url'
 import cbor from 'cbor'
@@ -18,6 +17,7 @@ async function setup(req: NextApiRequest, res: NextApiResponse<SetupVerifyRespon
   if (typeof clientDataJSON !== 'string') {
     throw new Error(`'clientDataJSON' isn't a string`)
   }
+
   if (typeof attestationObject !== 'string') {
     throw new Error(`'attestationObject' isn't a string`)
   }
@@ -44,6 +44,7 @@ async function setup(req: NextApiRequest, res: NextApiResponse<SetupVerifyRespon
     console.log(clientDataChallenge, challenge)
     throw new Error(`Invalid 'challenge'`)
   }
+
   if (clientDataOrigin !== 'http://localhost:3000') {
     throw new Error(`Invalid 'origin'`)
   }
