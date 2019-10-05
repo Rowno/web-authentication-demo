@@ -2,7 +2,7 @@ import { FunctionComponent } from 'react'
 import { create, PublicKeyCredentialWithAttestationJSON } from '@github/webauthn-json'
 import { SetupRequestResponse } from './api/setup-request'
 
-async function auth(): Promise<void> {
+async function register(): Promise<void> {
   const setupRes = await fetch('/api/setup-request', {
     method: 'post'
   })
@@ -40,6 +40,8 @@ async function auth(): Promise<void> {
     throw new Error(error.message)
   }
 
+  console.log(credential)
+
   const verifyRes = await fetch('/api/setup-verify', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
@@ -58,7 +60,7 @@ const Home: FunctionComponent = () => {
   return (
     <div>
       <h1>Web Authentication</h1>
-      <button onClick={auth}>Auth</button>
+      <button onClick={register}>Register</button>
     </div>
   )
 }
