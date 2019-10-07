@@ -2,6 +2,7 @@ import React from 'react'
 import App from 'next/app'
 import Head from 'next/head'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import { SnackbarProvider } from 'notistack'
 
 export default class MyApp extends App {
   componentDidMount(): void {
@@ -20,8 +21,10 @@ export default class MyApp extends App {
         <Head>
           <title>Web Authentication</title>
         </Head>
-        <CssBaseline />
-        <Component {...pageProps} />
+        <SnackbarProvider>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </SnackbarProvider>
       </React.Fragment>
     )
   }

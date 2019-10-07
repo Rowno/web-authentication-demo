@@ -6,7 +6,7 @@ export default async function register(): Promise<void> {
 
   if (!requestRes.ok) {
     const errorResult = await requestRes.json()
-    throw new Error(`HTTP error ${requestRes.status}: ${errorResult.error}`)
+    throw new Error(errorResult.error)
   }
 
   const requestResult: SetupRequestResponse = await requestRes.json()
@@ -36,8 +36,6 @@ export default async function register(): Promise<void> {
     throw new Error(error.message)
   }
 
-  console.log(credential)
-
   const verifyRes = await fetch('/api/setup-verify', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
@@ -49,6 +47,6 @@ export default async function register(): Promise<void> {
 
   if (!verifyRes.ok) {
     const errorResult = await verifyRes.json()
-    throw new Error(`HTTP error ${verifyRes.status}: ${errorResult.error}`)
+    throw new Error(errorResult.error)
   }
 }

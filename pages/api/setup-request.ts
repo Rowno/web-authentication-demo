@@ -3,7 +3,7 @@ import crypto from 'crypto'
 import base64url from 'base64url'
 import redis from '../../src/redis'
 import handleError from '../../src/handle-error'
-import user from '../user'
+import user from '../../src/user'
 
 export interface SetupRequestResponse {
   id: string

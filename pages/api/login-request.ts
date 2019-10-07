@@ -4,7 +4,7 @@ import base64url from 'base64url'
 import handleError from '../../src/handle-error'
 import redis from '../../src/redis'
 import { Credential } from '../../src/types'
-import user from '../user'
+import user from '../../src/user'
 
 export interface LoginRequestResponse {
   credentialId: string

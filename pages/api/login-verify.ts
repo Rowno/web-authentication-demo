@@ -6,7 +6,7 @@ import handleError from '../../src/handle-error'
 import redis from '../../src/redis'
 import { Credential } from '../../src/types'
 import { allowedOrigins } from '../../src/config'
-import user from '../user'
+import user from '../../src/user'
 
 export interface LoginVerifyResponse {
   ok: boolean
