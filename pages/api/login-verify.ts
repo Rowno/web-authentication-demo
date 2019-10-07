@@ -5,6 +5,7 @@ import { get } from 'lodash'
 import handleError from '../../lib/handle-error'
 import redis from '../../lib/redis'
 import { Credential } from '../../lib/types'
+import { allowedOrigins } from '../../lib/config'
 import user from '../user'
 
 export interface LoginVerifyResponse {
@@ -60,7 +61,7 @@ async function loginVerify(req: NextApiRequest, res: NextApiResponse<LoginVerify
     throw new Error(`Invalid 'challenge'`)
   }
 
-  if (clientDataOrigin !== 'http://localhost:3000') {
+  if (!allowedOrigins.includes(clientDataOrigin)) {
     throw new Error(`Invalid 'origin'`)
   }
 

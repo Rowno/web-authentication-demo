@@ -7,6 +7,7 @@ import jwkToPem from 'jwk-to-pem'
 import redis from '../../lib/redis'
 import { Credential } from '../../lib/types'
 import handleError from '../../lib/handle-error'
+import { allowedOrigins } from '../../lib/config'
 import user from '../user'
 
 export interface SetupVerifyResponse {
@@ -50,7 +51,7 @@ async function setupVerify(req: NextApiRequest, res: NextApiResponse<SetupVerify
     throw new Error(`Invalid 'challenge'`)
   }
 
-  if (clientDataOrigin !== 'http://localhost:3000') {
+  if (!allowedOrigins.includes(clientDataOrigin)) {
     throw new Error(`Invalid 'origin'`)
   }
 

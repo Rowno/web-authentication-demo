@@ -25,7 +25,7 @@ async function register(): Promise<void> {
         challenge: requestResult.challenge,
         rp: {
           name: 'Test',
-          id: 'localhost'
+          id: document.location.hostname
         },
         user: {
           id: requestResult.id,
@@ -34,7 +34,6 @@ async function register(): Promise<void> {
         },
         pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
         authenticatorSelection: {
-          authenticatorAttachment: 'cross-platform',
           userVerification: 'discouraged'
         },
         attestation: 'none'
