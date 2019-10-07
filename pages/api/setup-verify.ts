@@ -5,6 +5,7 @@ import cbor from 'cbor'
 import coseToJwk from 'cose-to-jwk'
 import jwkToPem from 'jwk-to-pem'
 import redis from '../../lib/redis'
+import { Credential } from '../../lib/types'
 import handleError from '../../lib/handle-error'
 import user from '../user'
 
@@ -12,7 +13,7 @@ export interface SetupVerifyResponse {
   ok: boolean
 }
 
-async function setup(req: NextApiRequest, res: NextApiResponse<SetupVerifyResponse>): Promise<void> {
+async function setupVerify(req: NextApiRequest, res: NextApiResponse<SetupVerifyResponse>): Promise<void> {
   const clientDataJSON: unknown = get(req.body, 'clientDataJSON')
   const attestationObject: unknown = get(req.body, 'attestationObject')
 
@@ -24,10 +25,14 @@ async function setup(req: NextApiRequest, res: NextApiResponse<SetupVerifyRespon
     throw new Error(`'attestationObject' isn't a string`)
   }
 
-  const clientData = JSON.parse(base64url.decode(clientDataJSON))
-
   const challenge = await redis.get(`challenge:${user.id}`)
   await redis.del(`challenge:${user.id}`)
+
+  if (challenge === null) {
+    throw new Error('Challenge not found')
+  }
+
+  const clientData = JSON.parse(base64url.decode(clientDataJSON))
 
   const clientDataChallenge: unknown = get(clientData, 'challenge')
   const clientDataOrigin: unknown = get(clientData, 'origin')
@@ -62,7 +67,7 @@ async function setup(req: NextApiRequest, res: NextApiResponse<SetupVerifyRespon
 
   // https://w3c.github.io/webauthn/#authenticator-data
   const credentialIdLength = authData.readUInt16BE(53)
-  const credentialId = authData.slice(55, 55 + credentialIdLength).toString('base64')
+  const credentialId = base64url.encode(authData.slice(55, 55 + credentialIdLength))
   console.log('credentialId', credentialId)
 
   const rawPublicKey = authData.slice(55 + credentialIdLength)
@@ -71,15 +76,14 @@ async function setup(req: NextApiRequest, res: NextApiResponse<SetupVerifyRespon
   const pemPublicKey = jwkToPem(jwkPublicKey)
   console.log(pemPublicKey)
 
-  await redis.set(
-    `credential:${user.id}`,
-    JSON.stringify({
-      credentialId,
-      publicKey: pemPublicKey
-    })
-  )
+  const credential: Credential = {
+    credentialId,
+    publicKey: pemPublicKey
+  }
+
+  await redis.set(`credential:${user.id}`, JSON.stringify(credential))
 
   res.json({ ok: true })
 }
 
-export default handleError(setup)
+export default handleError(setupVerify)

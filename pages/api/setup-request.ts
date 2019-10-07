@@ -12,9 +12,8 @@ export interface SetupRequestResponse {
   challenge: string
 }
 
-async function setup(_req: NextApiRequest, res: NextApiResponse<SetupRequestResponse>): Promise<void> {
+async function setupRequest(_req: NextApiRequest, res: NextApiResponse<SetupRequestResponse>): Promise<void> {
   const challenge = base64url.encode(crypto.randomBytes(32))
-
   await redis.set(`challenge:${user.id}`, challenge, 'EX', 300)
 
   res.json({
@@ -25,4 +24,4 @@ async function setup(_req: NextApiRequest, res: NextApiResponse<SetupRequestResp
   })
 }
 
-export default handleError(setup)
+export default handleError(setupRequest)
