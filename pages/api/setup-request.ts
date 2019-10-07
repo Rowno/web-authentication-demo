@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import crypto from 'crypto'
-import base64url from 'base64url'
 import redis from '../../src/server/redis'
 import handleError from '../../src/server/handle-error'
+import generateChallenge from '../../src/server/generate-challenge'
 import user from '../../src/user'
 
 export interface SetupRequestResponse {
@@ -13,7 +12,7 @@ export interface SetupRequestResponse {
 }
 
 async function setupRequest(_req: NextApiRequest, res: NextApiResponse<SetupRequestResponse>): Promise<void> {
-  const challenge = base64url.encode(crypto.randomBytes(32))
+  const challenge = generateChallenge()
   await redis.set(`challenge:${user.id}`, challenge, 'EX', 300)
 
   res.json({

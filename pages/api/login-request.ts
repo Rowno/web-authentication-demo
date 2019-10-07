@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import crypto from 'crypto'
-import base64url from 'base64url'
 import handleError from '../../src/server/handle-error'
 import redis from '../../src/server/redis'
+import generateChallenge from '../../src/server/generate-challenge'
 import { Credential } from '../../src/types'
 import user from '../../src/user'
 
@@ -19,7 +18,7 @@ async function loginRequest(_req: NextApiRequest, res: NextApiResponse<LoginRequ
 
   const credential: Credential = JSON.parse(rawCredential)
 
-  const challenge = base64url.encode(crypto.randomBytes(32))
+  const challenge = generateChallenge()
   await redis.set(`challenge:${user.id}`, challenge, 'EX', 300)
 
   res.json({
