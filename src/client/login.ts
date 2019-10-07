@@ -1,5 +1,5 @@
 import { get, PublicKeyCredentialWithAssertionJSON } from '@github/webauthn-json'
-import { LoginRequestResponse } from '../pages/api/login-request'
+import { LoginRequestResponse } from '../../pages/api/login-request'
 
 export default async function login(): Promise<void> {
   const requestRes = await fetch('/api/login-request', { method: 'post' })

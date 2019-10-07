@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import crypto from 'crypto'
 import base64url from 'base64url'
-import handleError from '../../src/handle-error'
-import redis from '../../src/redis'
+import handleError from '../../src/server/handle-error'
+import redis from '../../src/server/redis'
 import { Credential } from '../../src/types'
 import user from '../../src/user'
 
