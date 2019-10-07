@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import crypto from 'crypto'
 import base64url from 'base64url'
-import handleError from '../../lib/handle-error'
-import redis from '../../lib/redis'
-import { Credential } from '../../lib/types'
+import handleError from '../../src/handle-error'
+import redis from '../../src/redis'
+import { Credential } from '../../src/types'
 import user from '../user'
 
 export interface LoginRequestResponse {
