@@ -17,7 +17,9 @@
   },
   "dependencies": {
     "@github/webauthn-json": "^0.3.6",
+    "@hapi/joi": "^16.1.7",
     "@material-ui/core": "^4.5.0",
+    "@material-ui/icons": "^4.4.3",
     "base64url": "^3.0.1",
     "cbor": "^5.0.1",
     "cose-to-jwk": "^1.1.0",
@@ -31,6 +33,7 @@
   },
   "devDependencies": {
     "@types/cbor": "^2.0.0",
+    "@types/hapi__joi": "^15.0.4",
     "@types/ioredis": "^4.0.18",
     "@types/jwk-to-pem": "^2.0.0",
     "@types/lodash": "^4.14.141",

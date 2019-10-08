@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import App from 'next/app'
 import Head from 'next/head'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { SnackbarProvider } from 'notistack'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
+import { SnackbarProvider, useSnackbar } from 'notistack'
 
 export default class MyApp extends App {
   componentDidMount(): void {
@@ -21,11 +23,28 @@ export default class MyApp extends App {
         <Head>
           <title>Web Authentication</title>
         </Head>
-        <SnackbarProvider anchorOrigin={{ horizontal: 'center', vertical: 'top' }}>
+        <SnackbarProvider
+          anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
+          action={key => <SnackbarCloseButton key={key} />}
+        >
           <CssBaseline />
           <Component {...pageProps} />
         </SnackbarProvider>
       </React.Fragment>
     )
   }
+}
+
+interface SnackbarCloseButtonProps {
+  key?: string | number
+}
+
+const SnackbarCloseButton: FunctionComponent<SnackbarCloseButtonProps> = ({ key }) => {
+  const { closeSnackbar } = useSnackbar()
+
+  return (
+    <IconButton onClick={() => closeSnackbar(key)}>
+      <CloseIcon />
+    </IconButton>
+  )
 }
