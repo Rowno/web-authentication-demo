@@ -1,8 +1,8 @@
 import { FunctionComponent, useCallback } from 'react'
 import { Box, Button, AppBar, Typography, Toolbar } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
-import register from '../src/client/register'
-import login from '../src/client/login'
+import register from '../client/register'
+import login from '../client/login'
 
 const Home: FunctionComponent = () => {
   const { enqueueSnackbar } = useSnackbar()

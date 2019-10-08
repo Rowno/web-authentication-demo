@@ -4,11 +4,11 @@ import base64url from 'base64url'
 import cbor from 'cbor'
 import coseToJwk from 'cose-to-jwk'
 import jwkToPem from 'jwk-to-pem'
-import redis from '../../src/server/redis'
-import { Credential } from '../../src/types'
-import handleError from '../../src/server/handle-error'
-import { allowedOrigins } from '../../src/config'
-import user from '../../src/user'
+import redis from '../../server/redis'
+import { Credential } from '../../types'
+import handleError from '../../server/handle-error'
+import { allowedOrigins } from '../../config'
+import user from '../../user'
 
 export interface SetupVerifyResponse {
   ok: boolean

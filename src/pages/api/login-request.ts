@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import handleError from '../../src/server/handle-error'
-import redis from '../../src/server/redis'
-import generateChallenge from '../../src/server/generate-challenge'
-import { Credential } from '../../src/types'
-import user from '../../src/user'
+import handleError from '../../server/handle-error'
+import redis from '../../server/redis'
+import generateChallenge from '../../server/generate-challenge'
+import { Credential } from '../../types'
+import user from '../../user'
 
 export interface LoginRequestResponse {
   credentialId: string

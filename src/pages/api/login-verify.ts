@@ -2,11 +2,11 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import crypto from 'crypto'
 import base64url from 'base64url'
 import { get } from 'lodash'
-import handleError from '../../src/server/handle-error'
-import redis from '../../src/server/redis'
-import { Credential } from '../../src/types'
-import { allowedOrigins } from '../../src/config'
-import user from '../../src/user'
+import handleError from '../../server/handle-error'
+import redis from '../../server/redis'
+import { Credential } from '../../types'
+import { allowedOrigins } from '../../config'
+import user from '../../user'
 
 export interface LoginVerifyResponse {
   ok: boolean

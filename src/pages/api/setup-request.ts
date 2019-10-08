@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import redis from '../../src/server/redis'
-import handleError from '../../src/server/handle-error'
-import generateChallenge from '../../src/server/generate-challenge'
-import user from '../../src/user'
+import redis from '../../server/redis'
+import handleError from '../../server/handle-error'
+import generateChallenge from '../../server/generate-challenge'
+import user from '../../user'
 
 export interface SetupRequestResponse {
   id: string
