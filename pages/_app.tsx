@@ -21,7 +21,7 @@ export default class MyApp extends App {
         <Head>
           <title>Web Authentication</title>
         </Head>
-        <SnackbarProvider>
+        <SnackbarProvider anchorOrigin={{ horizontal: 'center', vertical: 'top' }}>
           <CssBaseline />
           <Component {...pageProps} />
         </SnackbarProvider>
