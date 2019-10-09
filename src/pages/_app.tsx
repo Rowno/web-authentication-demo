@@ -24,7 +24,7 @@ export default class MyApp extends App {
         </Head>
         <SnackbarProvider
           anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
-          action={key => <SnackbarCloseButton key={key} />}
+          action={snackbarKey => <SnackbarCloseButton snackbarKey={snackbarKey} />}
         >
           <CssBaseline />
           <Component {...pageProps} />
@@ -35,14 +35,14 @@ export default class MyApp extends App {
 }
 
 interface SnackbarCloseButtonProps {
-  key?: string | number
+  snackbarKey?: string | number
 }
 
-const SnackbarCloseButton: FunctionComponent<SnackbarCloseButtonProps> = ({ key }) => {
+const SnackbarCloseButton: FunctionComponent<SnackbarCloseButtonProps> = ({ snackbarKey }) => {
   const { closeSnackbar } = useSnackbar()
 
   return (
-    <IconButton onClick={() => closeSnackbar(key)}>
+    <IconButton onClick={() => closeSnackbar(snackbarKey)}>
       <CloseIcon />
     </IconButton>
   )
