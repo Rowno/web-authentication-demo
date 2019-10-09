@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { get } from 'lodash'
 import base64url from 'base64url'
 import cbor from 'cbor'
 import coseToJwk from 'cose-to-jwk'
 import jwkToPem from 'jwk-to-pem'
+import joi from '@hapi/joi'
 import redis from '../../server/redis'
 import { Credential } from '../../types'
 import handleError from '../../server/handle-error'
@@ -14,68 +14,88 @@ export interface SetupVerifyResponse {
   ok: boolean
 }
 
+const paramsSchema = joi
+  .object()
+  .keys({
+    clientDataJSON: joi
+      .string()
+      .base64({ paddingRequired: false, urlSafe: true })
+      .required(),
+    attestationObject: joi
+      .string()
+      .base64({ paddingRequired: false, urlSafe: true })
+      .required()
+  })
+  .required()
+
+interface Params {
+  clientDataJSON: string
+  attestationObject: string
+}
+
+const clientDataSchema = joi
+  .object()
+  .keys({
+    challenge: joi
+      .string()
+      .valid(joi.ref('$challenge'))
+      .required()
+      .error(new Error('Invalid challenge')),
+    origin: joi
+      .string()
+      .valid(...allowedOrigins)
+      .required()
+      .error(new Error('Invalid origin')),
+    type: joi
+      .string()
+      .valid('webauthn.create')
+      .required()
+  })
+  .required()
+
+const attestationSchema = joi
+  .object()
+  .keys({
+    authData: joi
+      .binary()
+      .min(56)
+      .required()
+  })
+  .required()
+
+interface Attestation {
+  authData: Buffer
+}
+
 async function setupVerify(req: NextApiRequest, res: NextApiResponse<SetupVerifyResponse>): Promise<void> {
-  const clientDataJSON: unknown = get(req.body, 'clientDataJSON')
-  const attestationObject: unknown = get(req.body, 'attestationObject')
-
-  if (typeof clientDataJSON !== 'string') {
-    throw new Error(`'clientDataJSON' isn't a string`)
-  }
-
-  if (typeof attestationObject !== 'string') {
-    throw new Error(`'attestationObject' isn't a string`)
-  }
+  const { clientDataJSON, attestationObject }: Params = joi.attempt(req.body, paramsSchema)
 
   const challenge = await redis.get(`challenge:${user.id}`)
   await redis.del(`challenge:${user.id}`)
-
   if (challenge === null) {
     throw new Error('Challenge not found')
   }
 
   const clientData = JSON.parse(base64url.decode(clientDataJSON))
 
-  const clientDataChallenge: unknown = get(clientData, 'challenge')
-  const clientDataOrigin: unknown = get(clientData, 'origin')
-  const clientDataType: unknown = get(clientData, 'type')
-
-  if (
-    typeof clientDataChallenge !== 'string' ||
-    typeof clientDataOrigin !== 'string' ||
-    typeof clientDataType !== 'string'
-  ) {
-    throw new Error(`Invalid 'clientDataJSON'`)
-  }
-
-  if (clientDataChallenge !== challenge) {
-    throw new Error(`Invalid 'challenge'`)
-  }
-
-  if (!allowedOrigins.includes(clientDataOrigin)) {
-    throw new Error(`Invalid 'origin'`)
-  }
-
-  if (clientDataType !== 'webauthn.create') {
-    throw new Error(`Unexpected webauthn operation`)
-  }
+  joi.assert(clientData, clientDataSchema, {
+    allowUnknown: true,
+    context: {
+      challenge
+    }
+  })
 
   const attestation = cbor.decode(base64url.toBuffer(attestationObject))
-  const authData: unknown = get(attestation, 'authData')
 
-  if (!Buffer.isBuffer(authData)) {
-    throw new Error(`Invalid 'attestationObject'`)
-  }
+  const { authData }: Attestation = joi.attempt(attestation, attestationSchema, { allowUnknown: true })
 
   // https://w3c.github.io/webauthn/#authenticator-data
   const credentialIdLength = authData.readUInt16BE(53)
   const credentialId = base64url.encode(authData.slice(55, 55 + credentialIdLength))
-  console.log('credentialId', credentialId)
 
   const rawPublicKey = authData.slice(55 + credentialIdLength)
   const jwkPublicKey = coseToJwk(rawPublicKey)
-  console.log(jwkPublicKey)
   const pemPublicKey = jwkToPem(jwkPublicKey)
-  console.log(pemPublicKey)
 
   const credential: Credential = {
     credentialId,
