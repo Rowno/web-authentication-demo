@@ -33,7 +33,7 @@ const Home: FunctionComponent = () => {
       <AppBar position="static">
         <Toolbar variant="dense">
           <Typography component="h1" variant="h6">
-            Web Authentication
+            Web Authentication Demo
           </Typography>
         </Toolbar>
       </AppBar>

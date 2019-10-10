@@ -1,3 +1,3 @@
-# web-authentication
+# web-authentication-demo
 
 Project description.

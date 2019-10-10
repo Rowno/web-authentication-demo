@@ -20,7 +20,7 @@ export default class MyApp extends App {
     return (
       <React.Fragment>
         <Head>
-          <title>Web Authentication</title>
+          <title>Web Authentication Demo</title>
         </Head>
         <SnackbarProvider
           anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
