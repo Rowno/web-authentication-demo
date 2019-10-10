@@ -1,5 +1,6 @@
 import { FunctionComponent, useCallback } from 'react'
-import { Box, Button, AppBar, Typography, Toolbar } from '@material-ui/core'
+import { Button, AppBar, Typography, Toolbar } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 import register from '../client/register'
 import login from '../client/login'
