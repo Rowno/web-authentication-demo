@@ -11,3 +11,9 @@ Run `docker-compose up -d` to start the database and then run `yarn dev` to star
 To lint the files and test that the site builds, run `yarn lint` and `yarn build` (this will also check that the TypeScript is valid).
 
 To start the site in production mode, run `yarn build` and then `yarn start`.
+
+## License
+
+Web Authentication Demo is released under the ISC license.
+
+Copyright © 2019, Roland Warmerdam.

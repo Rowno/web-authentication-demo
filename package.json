@@ -4,7 +4,7 @@
   "description": "Project description.",
   "author": "Roland Warmerdam (https://roland.codes)",
   "repository": "Rowno/web-authentication-demo",
-  "license": "UNLICENSED",
+  "license": "ISC",
   "private": true,
   "scripts": {
     "lint": "eslint '**/*.{js,jsx,ts,tsx}'",
