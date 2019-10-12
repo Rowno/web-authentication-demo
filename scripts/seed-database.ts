@@ -16,6 +16,7 @@ db.transaction(async connection => {
       user_id         UUID NOT NULL REFERENCES users(id),
       credential_id   TEXT NOT NULL,
       public_key      TEXT NOT NULL,
+      name            TEXT NOT NULL,
       created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
       UNIQUE(user_id, credential_id)
     );
