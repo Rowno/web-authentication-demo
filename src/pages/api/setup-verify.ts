@@ -7,7 +7,7 @@ import joi from '@hapi/joi'
 import redis from '../../server/redis'
 import { Credential } from '../../types'
 import handleError from '../../server/handle-error'
-import { allowedOrigins } from '../../config'
+import { ALLOWED_ORIGINS } from '../../config'
 import user from '../../user'
 
 export interface SetupVerifyResponse {
@@ -43,7 +43,7 @@ const clientDataSchema = joi
       .error(new Error('Invalid challenge')),
     origin: joi
       .string()
-      .valid(...allowedOrigins)
+      .valid(...ALLOWED_ORIGINS)
       .required()
       .error(new Error('Invalid origin')),
     type: joi
