@@ -6,7 +6,7 @@ import session from 'express-session'
 import connectRedis from 'connect-redis'
 import moment from 'moment'
 import { NODE_ENV, SESSION_SECRET } from '../config'
-import routes from './routes'
+import apiRoutes from './api-routes'
 import redis from './redis'
 
 const SessionRedisStore = connectRedis(session)
@@ -38,7 +38,7 @@ app.use(
 )
 app.use(express.json())
 
-app.use(routes)
+app.use(apiRoutes)
 
 if (nextApp !== undefined) {
   const nextRequestHandler = nextApp.getRequestHandler()
