@@ -11,7 +11,10 @@ import redis from './redis'
 
 const SessionRedisStore = connectRedis(session)
 
-const nextApp = next({ dev: NODE_ENV !== 'production' })
+let nextApp: ReturnType<typeof next> | undefined
+if (NODE_ENV !== 'development') {
+  nextApp = next({ dev: false })
+}
 
 const app = express()
 app.set('trust proxy', true)
@@ -37,13 +40,17 @@ app.use(express.json())
 
 app.use(routes)
 
-const nextRequestHandler = nextApp.getRequestHandler()
-app.all('*', (req, res) => {
-  nextRequestHandler(req, res)
-})
+if (nextApp !== undefined) {
+  const nextRequestHandler = nextApp.getRequestHandler()
+  app.all('*', (req, res) => {
+    nextRequestHandler(req, res)
+  })
+}
 
 export async function startServer(port: number): Promise<Server> {
-  await nextApp.prepare()
+  if (nextApp !== undefined) {
+    await nextApp.prepare()
+  }
 
   return new Promise(resolve => {
     const server = app.listen(port, () => {

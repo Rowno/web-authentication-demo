@@ -1,11 +1,12 @@
-import { FunctionComponent, useCallback } from 'react'
+import { useCallback } from 'react'
+import { NextPage } from 'next'
 import { Button, AppBar, Typography, Toolbar } from '@material-ui/core'
 import { Box } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 import register from '../client/register'
 import login from '../client/login'
 
-const Home: FunctionComponent = () => {
+const Home: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar()
 
   const registerCallback = useCallback(() => {

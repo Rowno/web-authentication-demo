@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
-      - name: Build Next.js
+      - name: Build TypeScript and Next.js
         run: yarn build
 
       - name: Lint files

@@ -14,8 +14,11 @@
     "tsc": "tsc --module commonjs --outDir dist --target es2018 --noEmit false --isolatedModules false",
     "seed": "yarn ts-node scripts/seed-database.ts",
     "dev-typescript": "yarn tsc --watch --preserveWatchOutput",
-    "dev-server": "nodemon --delay 0.1 --watch dist dist/src/server/boot.js",
-    "dev": "yarn tsc && concurrently 'yarn dev-typescript' 'yarn dev-server'"
+    "dev-server": "PORT=3001 nodemon --delay 0.1 --watch dist dist/src/server/boot.js",
+    "dev-next": "next dev --port 3002",
+    "dev-proxy": "yarn ts-node scripts/dev-proxy.ts",
+    "dev": "yarn tsc && concurrently 'yarn dev-typescript' 'yarn dev-server' 'yarn dev-next' 'yarn dev-proxy'",
+    "test-server": "NODE_ENV=test yarn start"
   },
   "engines": {
     "node": "^10"
@@ -50,6 +53,7 @@
     "@types/express-session": "^1.15.14",
     "@types/hapi__joi": "^16.0.1",
     "@types/helmet": "^0.0.44",
+    "@types/http-proxy": "^1.17.0",
     "@types/ioredis": "^4.0.18",
     "@types/jwk-to-pem": "^2.0.0",
     "@types/lodash": "^4.14.144",
@@ -64,6 +68,7 @@
     "eslint-config-prettier": "^6.4.0",
     "eslint-config-xo": "^0.27.1",
     "eslint-config-xo-typescript": "^0.19.0",
+    "http-proxy": "^1.18.0",
     "nodemon": "^1.19.3",
     "prettier": "^1.18.2",
     "ts-node": "^8.4.1",
