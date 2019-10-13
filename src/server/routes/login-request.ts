@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import handleError from '../../server/handle-error'
-import redis from '../../server/redis'
-import generateChallenge from '../../server/generate-challenge'
+import redis from '../redis'
+import generateChallenge from '../generate-challenge'
 import { Credential } from '../../types'
 import user from '../../user'
 
@@ -27,4 +26,4 @@ async function loginRequest(_req: NextApiRequest, res: NextApiResponse<LoginRequ
   })
 }
 
-export default handleError(loginRequest)
+export default loginRequest

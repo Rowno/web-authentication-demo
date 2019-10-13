@@ -1,0 +1,53 @@
+import express from 'express'
+import helmet from 'helmet'
+import next from 'next'
+import { Server } from 'http'
+import session from 'express-session'
+import connectRedis from 'connect-redis'
+import moment from 'moment'
+import { NODE_ENV, SESSION_SECRET } from '../config'
+import routes from './routes'
+import redis from './redis'
+
+const SessionRedisStore = connectRedis(session)
+
+const nextApp = next({ dev: NODE_ENV !== 'production' })
+
+const app = express()
+app.set('trust proxy', true)
+
+app.use(helmet())
+app.use(
+  session({
+    cookie: {
+      httpOnly: true,
+      maxAge: moment.duration(1, 'week').asMilliseconds(),
+      sameSite: 'lax',
+      secure: 'auto'
+    },
+    name: 'session_token',
+    resave: false,
+    saveUninitialized: false,
+    secret: SESSION_SECRET,
+    store: new SessionRedisStore({ prefix: 'session:', client: redis as any }),
+    unset: 'destroy'
+  })
+)
+app.use(express.json())
+
+app.use(routes)
+
+const nextRequestHandler = nextApp.getRequestHandler()
+app.all('*', (req, res) => {
+  nextRequestHandler(req, res)
+})
+
+export async function startServer(port: number): Promise<Server> {
+  await nextApp.prepare()
+
+  return new Promise(resolve => {
+    const server = app.listen(port, () => {
+      resolve(server)
+    })
+  })
+}

@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import redis from '../../server/redis'
-import handleError from '../../server/handle-error'
-import generateChallenge from '../../server/generate-challenge'
+import redis from '../redis'
+import generateChallenge from '../generate-challenge'
 import user from '../../user'
 
 export interface SetupRequestResponse {
@@ -23,4 +22,4 @@ async function setupRequest(_req: NextApiRequest, res: NextApiResponse<SetupRequ
   })
 }
 
-export default handleError(setupRequest)
+export default setupRequest

@@ -2,8 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import crypto from 'crypto'
 import base64url from 'base64url'
 import joi from '@hapi/joi'
-import handleError from '../../server/handle-error'
-import redis from '../../server/redis'
+import redis from '../redis'
 import { Credential } from '../../types'
 import { ALLOWED_ORIGINS } from '../../config'
 import user from '../../user'
@@ -104,4 +103,4 @@ async function loginVerify(req: NextApiRequest, res: NextApiResponse<LoginVerify
   res.json({ ok: true })
 }
 
-export default handleError(loginVerify)
+export default loginVerify

@@ -4,9 +4,8 @@ import cbor from 'cbor'
 import coseToJwk from 'cose-to-jwk'
 import jwkToPem from 'jwk-to-pem'
 import joi from '@hapi/joi'
-import redis from '../../server/redis'
+import redis from '../redis'
 import { Credential } from '../../types'
-import handleError from '../../server/handle-error'
 import { ALLOWED_ORIGINS } from '../../config'
 import user from '../../user'
 
@@ -107,4 +106,4 @@ async function setupVerify(req: NextApiRequest, res: NextApiResponse<SetupVerify
   res.json({ ok: true })
 }
 
-export default handleError(setupVerify)
+export default setupVerify

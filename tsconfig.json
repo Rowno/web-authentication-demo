@@ -18,6 +18,6 @@
     "skipLibCheck": false,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "dist"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }
