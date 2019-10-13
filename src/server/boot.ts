@@ -8,7 +8,7 @@ let server: Server | undefined
 startServer(PORT)
   .then(s => {
     server = s
-    console.log(`Listening at http://localhost:${PORT}`)
+    console.log(`Server listening at http://localhost:${PORT}`)
   })
   .catch(error => {
     handleUncaught(error, 'unhandledRejection')

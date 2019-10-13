@@ -25,4 +25,6 @@ const server = http.createServer((req, res) => {
   proxy.web(req, res, { target })
 })
 
-server.listen(3000)
+server.listen(3000, () => {
+  console.log(`Development server listening at http://localhost:3000`)
+})
