@@ -36,6 +36,7 @@ export default async function login(email: string): Promise<void> {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       email,
+      credentialId: credential.id,
       authenticatorData: credential.response.authenticatorData,
       clientDataJSON: credential.response.clientDataJSON,
       signature: credential.response.signature

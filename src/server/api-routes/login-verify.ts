@@ -18,6 +18,7 @@ const paramsSchema = joi
       .string()
       .email()
       .required(),
+    credentialId: joi.string().required(),
     authenticatorData: joi
       .string()
       .base64({ paddingRequired: false, urlSafe: true })
@@ -35,6 +36,7 @@ const paramsSchema = joi
 
 interface Params {
   email: string
+  credentialId: string
   authenticatorData: string
   clientDataJSON: string
   signature: string
@@ -63,6 +65,7 @@ const clientDataSchema = joi
 export default async function loginVerify(req: Request, res: Response): Promise<void> {
   const {
     email,
+    credentialId,
     authenticatorData: rawAuthenticatorData,
     clientDataJSON: rawClientDataJSON,
     signature: rawSignature
@@ -80,8 +83,9 @@ export default async function loginVerify(req: Request, res: Response): Promise<
   }
 
   const keys = await getKeysByUserId(user.id)
-  if (keys.length === 0) {
-    throw new NotFound('No keys found')
+  const key = keys.find(k => k.credential_id === credentialId)
+  if (!key) {
+    throw new NotFound('Key not found')
   }
 
   const clientData = JSON.parse(base64url.decode(rawClientDataJSON))
@@ -104,7 +108,7 @@ export default async function loginVerify(req: Request, res: Response): Promise<
   const isValidSignature = crypto
     .createVerify('sha256')
     .update(signedData)
-    .verify(keys[0].public_key, signature)
+    .verify(key.public_key, signature)
 
   if (!isValidSignature) {
     throw new BadRequest(`Invalid signature`)
