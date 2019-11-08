@@ -1,7 +1,7 @@
 import { create, PublicKeyCredentialWithAttestationJSON } from '@github/webauthn-json'
 import { SetupRequestResponse } from '../server/api-routes/setup-request'
 
-export default async function register(): Promise<void> {
+export default async function register(email: string): Promise<void> {
   const requestRes = await fetch('/api/setup-request', { method: 'post' })
 
   if (!requestRes.ok) {
@@ -22,8 +22,8 @@ export default async function register(): Promise<void> {
         },
         user: {
           id: requestResult.id,
-          name: requestResult.email,
-          displayName: requestResult.name
+          name: email,
+          displayName: email
         },
         pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
         authenticatorSelection: {
@@ -40,6 +40,7 @@ export default async function register(): Promise<void> {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
+      email,
       clientDataJSON: credential.response.clientDataJSON,
       attestationObject: credential.response.attestationObject
     })

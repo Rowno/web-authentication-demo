@@ -1,8 +1,12 @@
 import { get, PublicKeyCredentialWithAssertionJSON } from '@github/webauthn-json'
 import { LoginRequestResponse } from '../server/api-routes/login-request'
 
-export default async function login(): Promise<void> {
-  const requestRes = await fetch('/api/login-request', { method: 'post' })
+export default async function login(email: string): Promise<void> {
+  const requestRes = await fetch('/api/login-request', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email })
+  })
 
   if (!requestRes.ok) {
     const errorResult = await requestRes.json()
@@ -16,12 +20,10 @@ export default async function login(): Promise<void> {
     credential = await get({
       publicKey: {
         challenge: requestResult.challenge,
-        allowCredentials: [
-          {
-            id: requestResult.credentialId,
-            type: 'public-key'
-          }
-        ],
+        allowCredentials: requestResult.credentialIds.map(id => ({
+          id,
+          type: 'public-key'
+        })),
         userVerification: 'discouraged'
       }
     })
@@ -33,6 +35,7 @@ export default async function login(): Promise<void> {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
+      email,
       authenticatorData: credential.response.authenticatorData,
       clientDataJSON: credential.response.clientDataJSON,
       signature: credential.response.signature

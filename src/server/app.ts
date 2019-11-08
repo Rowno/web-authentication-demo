@@ -26,7 +26,7 @@ app.use(
       httpOnly: true,
       maxAge: moment.duration(1, 'week').asMilliseconds(),
       sameSite: 'lax',
-      secure: 'auto'
+      secure: NODE_ENV === 'production'
     },
     name: 'session_token',
     resave: false,
@@ -40,7 +40,7 @@ app.use(express.json())
 
 app.use(apiRoutes)
 
-if (nextApp !== undefined) {
+if (nextApp) {
   const nextRequestHandler = nextApp.getRequestHandler()
   app.all('*', (req, res) => {
     nextRequestHandler(req, res)
@@ -48,7 +48,7 @@ if (nextApp !== undefined) {
 }
 
 export async function startServer(port: number): Promise<Server> {
-  if (nextApp !== undefined) {
+  if (nextApp) {
     await nextApp.prepare()
   }
 

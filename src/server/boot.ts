@@ -17,7 +17,7 @@ startServer(PORT)
   })
 
 const gracefulShutdown = once((exitCode: number) => {
-  if (server === undefined) {
+  if (!server) {
     return
   }
 

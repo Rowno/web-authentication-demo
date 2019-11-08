@@ -1,5 +1,5 @@
 import { sql } from 'slonik'
-import db from '../src/server/database'
+import { db } from '../src/server/database'
 
 db.transaction(async connection => {
   await connection.query(sql`

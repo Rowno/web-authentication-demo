@@ -36,6 +36,7 @@
     "express-promise-router": "^3.0.3",
     "express-session": "^1.17.0",
     "helmet": "^3.21.1",
+    "http-errors": "^1.7.3",
     "ioredis": "^4.14.1",
     "jwk-to-pem": "^2.0.1",
     "lodash": "^4.17.15",
@@ -44,7 +45,8 @@
     "notistack": "^0.9.3",
     "react": "^16.10.1",
     "react-dom": "^16.10.1",
-    "slonik": "^19.0.4"
+    "slonik": "^19.0.4",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@types/cbor": "^2.0.0",
@@ -53,6 +55,7 @@
     "@types/express-session": "^1.15.14",
     "@types/hapi__joi": "^16.0.1",
     "@types/helmet": "^0.0.44",
+    "@types/http-errors": "^1.6.2",
     "@types/http-proxy": "^1.17.0",
     "@types/ioredis": "^4.0.18",
     "@types/jwk-to-pem": "^2.0.0",
@@ -61,6 +64,7 @@
     "@types/react": "^16.9.4",
     "@types/react-dom": "^16.9.1",
     "@types/slonik": "^19.0.0",
+    "@types/uuid": "^3.4.5",
     "@typescript-eslint/eslint-plugin": "^2.3.1",
     "@typescript-eslint/parser": "^2.3.1",
     "concurrently": "^5.0.0",
@@ -95,6 +99,7 @@
       "browser": true
     },
     "rules": {
+      "prefer-destructuring": "off",
       "react/prop-types": "off",
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/strict-boolean-expressions": "off",

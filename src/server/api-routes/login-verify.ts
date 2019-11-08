@@ -1,11 +1,11 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import { Request, Response } from 'express'
 import crypto from 'crypto'
 import base64url from 'base64url'
 import joi from '@hapi/joi'
+import { NotFound } from 'http-errors'
 import redis from '../redis'
-import { Credential } from '../../types'
 import { ALLOWED_ORIGINS } from '../../config'
-import user from '../../user'
+import { getUserByEmail, getKeysByUserId } from '../database'
 
 export interface LoginVerifyResponse {
   ok: boolean
@@ -14,6 +14,10 @@ export interface LoginVerifyResponse {
 const paramsSchema = joi
   .object()
   .keys({
+    email: joi
+      .string()
+      .email()
+      .required(),
     authenticatorData: joi
       .string()
       .base64({ paddingRequired: false, urlSafe: true })
@@ -30,6 +34,7 @@ const paramsSchema = joi
   .required()
 
 interface Params {
+  email: string
   authenticatorData: string
   clientDataJSON: string
   signature: string
@@ -55,25 +60,30 @@ const clientDataSchema = joi
   })
   .required()
 
-async function loginVerify(req: NextApiRequest, res: NextApiResponse<LoginVerifyResponse>): Promise<void> {
+async function loginVerify(req: Request, res: Response): Promise<void> {
   const {
+    email,
     authenticatorData: rawAuthenticatorData,
     clientDataJSON: rawClientDataJSON,
     signature: rawSignature
   }: Params = joi.attempt(req.body, paramsSchema)
 
+  const user = await getUserByEmail(email)
+  if (!user) {
+    throw new NotFound('User not found')
+  }
+
   const challenge = await redis.get(`challenge:${user.id}`)
   await redis.del(`challenge:${user.id}`)
-  if (challenge === null) {
-    throw new Error('Challenge not found')
+  if (!challenge) {
+    throw new NotFound('Challenge not found')
   }
 
-  const rawCredential = await redis.get(`credential:${user.id}`)
-  if (rawCredential === null) {
-    throw new Error(`No key setup`)
+  const keys = await getKeysByUserId(user.id)
+  if (keys.length === 0) {
+    throw new NotFound('No keys found')
   }
 
-  const credential: Credential = JSON.parse(rawCredential)
   const clientData = JSON.parse(base64url.decode(rawClientDataJSON))
 
   joi.assert(clientData, clientDataSchema, {
@@ -94,13 +104,14 @@ async function loginVerify(req: NextApiRequest, res: NextApiResponse<LoginVerify
   const isValidSignature = crypto
     .createVerify('sha256')
     .update(signedData)
-    .verify(credential.publicKey, signature)
+    .verify(keys[0].public_key, signature)
 
   if (!isValidSignature) {
     throw new Error(`Invalid signature`)
   }
 
-  res.json({ ok: true })
+  const result: LoginVerifyResponse = { ok: true }
+  res.json(result)
 }
 
 export default loginVerify

@@ -1,13 +1,13 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import { Request, Response } from 'express'
 import base64url from 'base64url'
 import cbor from 'cbor'
 import coseToJwk from 'cose-to-jwk'
 import jwkToPem from 'jwk-to-pem'
 import joi from '@hapi/joi'
+import { NotFound, BadRequest } from 'http-errors'
 import redis from '../redis'
-import { Credential } from '../../types'
 import { ALLOWED_ORIGINS } from '../../config'
-import user from '../../user'
+import { createUser } from '../database'
 
 export interface SetupVerifyResponse {
   ok: boolean
@@ -16,6 +16,10 @@ export interface SetupVerifyResponse {
 const paramsSchema = joi
   .object()
   .keys({
+    email: joi
+      .string()
+      .email()
+      .required(),
     clientDataJSON: joi
       .string()
       .base64({ paddingRequired: false, urlSafe: true })
@@ -28,6 +32,7 @@ const paramsSchema = joi
   .required()
 
 interface Params {
+  email: string
   clientDataJSON: string
   attestationObject: string
 }
@@ -66,13 +71,18 @@ interface Attestation {
   authData: Buffer
 }
 
-async function setupVerify(req: NextApiRequest, res: NextApiResponse<SetupVerifyResponse>): Promise<void> {
-  const { clientDataJSON, attestationObject }: Params = joi.attempt(req.body, paramsSchema)
+async function setupVerify(req: Request, res: Response): Promise<void> {
+  const { email, clientDataJSON, attestationObject }: Params = joi.attempt(req.body, paramsSchema)
 
-  const challenge = await redis.get(`challenge:${user.id}`)
-  await redis.del(`challenge:${user.id}`)
-  if (challenge === null) {
-    throw new Error('Challenge not found')
+  const pendingUserId: string | undefined = req.session!.pendingUserId
+  if (!pendingUserId) {
+    throw new BadRequest('Call /api/setup-request first')
+  }
+
+  const challenge = await redis.get(`challenge:${pendingUserId}`)
+  await redis.del(`challenge:${pendingUserId}`)
+  if (!challenge) {
+    throw new NotFound('Challenge not found')
   }
 
   const clientData = JSON.parse(base64url.decode(clientDataJSON))
@@ -96,14 +106,16 @@ async function setupVerify(req: NextApiRequest, res: NextApiResponse<SetupVerify
   const jwkPublicKey = coseToJwk(rawPublicKey)
   const pemPublicKey = jwkToPem(jwkPublicKey)
 
-  const credential: Credential = {
+  await createUser({
+    userId: pendingUserId,
+    email,
     credentialId,
     publicKey: pemPublicKey
-  }
+  })
 
-  await redis.set(`credential:${user.id}`, JSON.stringify(credential))
-
-  res.json({ ok: true })
+  delete req.session!.pendingUserId
+  const result: SetupVerifyResponse = { ok: true }
+  res.json(result)
 }
 
 export default setupVerify

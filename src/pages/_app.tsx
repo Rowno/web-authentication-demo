@@ -18,18 +18,15 @@ export default class MyApp extends App {
     const { Component, pageProps } = this.props
 
     return (
-      <React.Fragment>
+      <>
         <Head>
           <title>Web Authentication Demo</title>
         </Head>
-        <SnackbarProvider
-          anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
-          action={snackbarKey => <SnackbarCloseButton snackbarKey={snackbarKey} />}
-        >
+        <SnackbarProvider action={snackbarKey => <SnackbarCloseButton snackbarKey={snackbarKey} />}>
           <CssBaseline />
           <Component {...pageProps} />
         </SnackbarProvider>
-      </React.Fragment>
+      </>
     )
   }
 }

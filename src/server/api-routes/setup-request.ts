@@ -1,25 +1,24 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import { Request, Response } from 'express'
+import uuidv4 from 'uuid/v4'
 import redis from '../redis'
 import generateChallenge from '../generate-challenge'
-import user from '../../user'
 
 export interface SetupRequestResponse {
   id: string
-  name: string
-  email: string
   challenge: string
 }
 
-async function setupRequest(_req: NextApiRequest, res: NextApiResponse<SetupRequestResponse>): Promise<void> {
+async function setupRequest(req: Request, res: Response): Promise<void> {
+  const pendingUserId = uuidv4()
   const challenge = generateChallenge()
-  await redis.set(`challenge:${user.id}`, challenge, 'EX', 300)
+  await redis.set(`challenge:${pendingUserId}`, challenge, 'EX', 300)
+  req.session!.pendingUserId = pendingUserId
 
-  res.json({
-    id: user.id,
-    name: user.name,
-    email: user.email,
+  const result: SetupRequestResponse = {
+    id: pendingUserId,
     challenge
-  })
+  }
+  res.json(result)
 }
 
 export default setupRequest
