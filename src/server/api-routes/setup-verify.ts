@@ -7,7 +7,7 @@ import joi from '@hapi/joi'
 import { NotFound, BadRequest } from 'http-errors'
 import redis from '../redis'
 import { ALLOWED_ORIGINS } from '../../config'
-import { createUser } from '../database'
+import { createUser, getUserByEmail } from '../database'
 
 export interface SetupVerifyResponse {
   ok: boolean
@@ -73,6 +73,11 @@ interface Attestation {
 
 async function setupVerify(req: Request, res: Response): Promise<void> {
   const { email, clientDataJSON, attestationObject }: Params = joi.attempt(req.body, paramsSchema)
+
+  const user = await getUserByEmail(email)
+  if (user) {
+    throw new BadRequest('User already exists')
+  }
 
   const pendingUserId: string | undefined = req.session!.pendingUserId
   if (!pendingUserId) {

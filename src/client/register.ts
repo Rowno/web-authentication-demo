@@ -2,7 +2,11 @@ import { create, PublicKeyCredentialWithAttestationJSON } from '@github/webauthn
 import { SetupRequestResponse } from '../server/api-routes/setup-request'
 
 export default async function register(email: string): Promise<void> {
-  const requestRes = await fetch('/api/setup-request', { method: 'post' })
+  const requestRes = await fetch('/api/setup-request', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email })
+  })
 
   if (!requestRes.ok) {
     const errorResult = await requestRes.json()

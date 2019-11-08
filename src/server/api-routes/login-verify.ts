@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import crypto from 'crypto'
 import base64url from 'base64url'
 import joi from '@hapi/joi'
-import { NotFound } from 'http-errors'
+import { NotFound, BadRequest } from 'http-errors'
 import redis from '../redis'
 import { ALLOWED_ORIGINS } from '../../config'
 import { getUserByEmail, getKeysByUserId } from '../database'
@@ -107,7 +107,7 @@ async function loginVerify(req: Request, res: Response): Promise<void> {
     .verify(keys[0].public_key, signature)
 
   if (!isValidSignature) {
-    throw new Error(`Invalid signature`)
+    throw new BadRequest(`Invalid signature`)
   }
 
   const result: LoginVerifyResponse = { ok: true }
