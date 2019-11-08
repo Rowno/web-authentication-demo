@@ -6,7 +6,7 @@ import generateChallenge from '../generate-challenge'
 import { getUserByEmail } from '../database'
 import { BadRequest } from 'http-errors'
 
-export interface SetupRequestResponse {
+export interface RegisterRequestResponse {
   id: string
   challenge: string
 }
@@ -25,7 +25,7 @@ interface Params {
   email: string
 }
 
-async function setupRequest(req: Request, res: Response): Promise<void> {
+export default async function registerRequest(req: Request, res: Response): Promise<void> {
   const { email }: Params = joi.attempt(req.body, paramsSchema)
 
   const user = await getUserByEmail(email)
@@ -38,11 +38,9 @@ async function setupRequest(req: Request, res: Response): Promise<void> {
   await redis.set(`challenge:${pendingUserId}`, challenge, 'EX', 300)
   req.session!.pendingUserId = pendingUserId
 
-  const result: SetupRequestResponse = {
+  const result: RegisterRequestResponse = {
     id: pendingUserId,
     challenge
   }
   res.json(result)
 }
-
-export default setupRequest

@@ -24,7 +24,7 @@ interface Params {
   email: string
 }
 
-async function loginRequest(req: Request, res: Response): Promise<void> {
+export default async function loginRequest(req: Request, res: Response): Promise<void> {
   const { email }: Params = joi.attempt(req.body, paramsSchema)
 
   const user = await getUserByEmail(email)
@@ -46,5 +46,3 @@ async function loginRequest(req: Request, res: Response): Promise<void> {
   }
   res.json(result)
 }
-
-export default loginRequest

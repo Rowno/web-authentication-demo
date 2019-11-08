@@ -9,7 +9,7 @@ import redis from '../redis'
 import { ALLOWED_ORIGINS } from '../../config'
 import { createUser, getUserByEmail } from '../database'
 
-export interface SetupVerifyResponse {
+export interface RegisterVerifyResponse {
   ok: boolean
 }
 
@@ -71,7 +71,7 @@ interface Attestation {
   authData: Buffer
 }
 
-async function setupVerify(req: Request, res: Response): Promise<void> {
+export default async function registerVerify(req: Request, res: Response): Promise<void> {
   const { email, clientDataJSON, attestationObject }: Params = joi.attempt(req.body, paramsSchema)
 
   const user = await getUserByEmail(email)
@@ -81,7 +81,7 @@ async function setupVerify(req: Request, res: Response): Promise<void> {
 
   const pendingUserId: string | undefined = req.session!.pendingUserId
   if (!pendingUserId) {
-    throw new BadRequest('Call /api/setup-request first')
+    throw new BadRequest('Call /api/register-request first')
   }
 
   const challenge = await redis.get(`challenge:${pendingUserId}`)
@@ -119,8 +119,6 @@ async function setupVerify(req: Request, res: Response): Promise<void> {
   })
 
   delete req.session!.pendingUserId
-  const result: SetupVerifyResponse = { ok: true }
+  const result: RegisterVerifyResponse = { ok: true }
   res.json(result)
 }
-
-export default setupVerify

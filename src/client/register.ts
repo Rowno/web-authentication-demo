@@ -1,8 +1,8 @@
 import { create, PublicKeyCredentialWithAttestationJSON } from '@github/webauthn-json'
-import { SetupRequestResponse } from '../server/api-routes/setup-request'
+import { RegisterRequestResponse } from '../server/api-routes/register-request'
 
 export default async function register(email: string): Promise<void> {
-  const requestRes = await fetch('/api/setup-request', {
+  const requestRes = await fetch('/api/register-request', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email })
@@ -13,7 +13,7 @@ export default async function register(email: string): Promise<void> {
     throw new Error(errorResult.error)
   }
 
-  const requestResult: SetupRequestResponse = await requestRes.json()
+  const requestResult: RegisterRequestResponse = await requestRes.json()
 
   let credential: PublicKeyCredentialWithAttestationJSON
   try {
@@ -40,7 +40,7 @@ export default async function register(email: string): Promise<void> {
     throw new Error(error.message)
   }
 
-  const verifyRes = await fetch('/api/setup-verify', {
+  const verifyRes = await fetch('/api/register-verify', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

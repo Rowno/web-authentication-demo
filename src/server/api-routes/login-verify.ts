@@ -60,7 +60,7 @@ const clientDataSchema = joi
   })
   .required()
 
-async function loginVerify(req: Request, res: Response): Promise<void> {
+export default async function loginVerify(req: Request, res: Response): Promise<void> {
   const {
     email,
     authenticatorData: rawAuthenticatorData,
@@ -113,5 +113,3 @@ async function loginVerify(req: Request, res: Response): Promise<void> {
   const result: LoginVerifyResponse = { ok: true }
   res.json(result)
 }
-
-export default loginVerify

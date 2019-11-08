@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import createRouter from 'express-promise-router'
-import setupRequest from './setup-request'
-import setupVerify from './setup-verify'
+import registerRequest from './register-request'
+import registerVerify from './register-verify'
 import loginRequest from './login-request'
 import loginVerify from './login-verify'
 import session from './session'
@@ -10,8 +10,8 @@ import { NODE_ENV } from '../../config'
 const router = createRouter()
 export default router
 
-router.post('/api/setup-request', setupRequest)
-router.post('/api/setup-verify', setupVerify)
+router.post('/api/register-request', registerRequest)
+router.post('/api/register-verify', registerVerify)
 router.post('/api/login-request', loginRequest)
 router.post('/api/login-verify', loginVerify)
 router.get('/api/session', session)

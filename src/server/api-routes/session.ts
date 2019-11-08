@@ -10,7 +10,7 @@ export interface SessionResponse {
   user?: User
 }
 
-async function session(req: Request, res: Response): Promise<void> {
+export default async function session(req: Request, res: Response): Promise<void> {
   let result: SessionResponse
 
   const userId: string | undefined = req.session!.userId
@@ -35,5 +35,3 @@ async function session(req: Request, res: Response): Promise<void> {
   }
   res.json(result)
 }
-
-export default session
