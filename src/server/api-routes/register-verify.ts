@@ -118,7 +118,9 @@ export default async function registerVerify(req: Request, res: Response): Promi
     publicKey: pemPublicKey
   })
 
+  req.session!.userId = pendingUserId
   delete req.session!.pendingUserId
+
   const result: RegisterVerifyResponse = { ok: true }
   res.json(result)
 }

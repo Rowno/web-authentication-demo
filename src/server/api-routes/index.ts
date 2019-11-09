@@ -5,6 +5,7 @@ import registerVerify from './register-verify'
 import loginRequest from './login-request'
 import loginVerify from './login-verify'
 import session from './session'
+import logout from './logout'
 import { NODE_ENV } from '../../config'
 
 const router = createRouter()
@@ -15,6 +16,7 @@ router.post('/api/register-verify', registerVerify)
 router.post('/api/login-request', loginRequest)
 router.post('/api/login-verify', loginVerify)
 router.get('/api/session', session)
+router.post('/api/logout', logout)
 
 router.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
   let message = 'Internal server error'

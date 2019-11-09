@@ -1,7 +1,13 @@
+import fetch from 'isomorphic-unfetch'
 import { SessionResponse } from '../server/api-routes/session'
+import { BASE_URL } from '../config'
 
-export default async function getSession(): Promise<SessionResponse> {
-  const sessionRes = await fetch('/api/session')
+export default async function getSession(cookieHeader?: string): Promise<SessionResponse> {
+  const sessionRes = await fetch(`${BASE_URL}/api/session`, {
+    headers: {
+      Cookie: cookieHeader || ''
+    }
+  })
 
   if (!sessionRes.ok) {
     const errorResult = await sessionRes.json()

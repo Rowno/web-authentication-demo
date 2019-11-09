@@ -15,15 +15,27 @@ export default async function session(req: Request, res: Response): Promise<void
 
   const userId: string | undefined = req.session!.userId
   if (!userId) {
-    result = {}
-    res.json(result)
+    req.session!.regenerate(error => {
+      if (error) {
+        console.error(error)
+      }
+
+      result = {}
+      res.json(result)
+    })
     return
   }
 
   const user = await getUserById(userId)
   if (!user) {
-    result = {}
-    res.json(result)
+    req.session!.regenerate(error => {
+      if (error) {
+        console.error(error)
+      }
+
+      result = {}
+      res.json(result)
+    })
     return
   }
 

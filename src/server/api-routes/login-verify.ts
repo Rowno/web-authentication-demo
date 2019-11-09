@@ -114,6 +114,8 @@ export default async function loginVerify(req: Request, res: Response): Promise<
     throw new BadRequest(`Invalid signature`)
   }
 
+  req.session!.userId = user.id
+
   const result: LoginVerifyResponse = { ok: true }
   res.json(result)
 }

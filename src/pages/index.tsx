@@ -4,6 +4,8 @@ import { Button, AppBar, Typography, Toolbar, Paper, TextField, makeStyles, Box 
 import { useSnackbar } from 'notistack'
 import register from '../client/register'
 import login from '../client/login'
+import getSession from '../client/get-session'
+import logout from '../client/logout'
 
 const useStyles = makeStyles({
   layout: {
@@ -72,6 +74,21 @@ const Home: NextPage<HomeProps> = props => {
     [enqueueSnackbar, loginEmail]
   )
 
+  const logoutCallback = useCallback<React.FormEventHandler<HTMLFormElement>>(
+    e => {
+      e.preventDefault()
+
+      logout()
+        .then(() => {
+          window.location.reload()
+        })
+        .catch(error => {
+          enqueueSnackbar(error.message, { variant: 'error' })
+        })
+    },
+    [enqueueSnackbar]
+  )
+
   return (
     <>
       <AppBar position="static">
@@ -85,7 +102,7 @@ const Home: NextPage<HomeProps> = props => {
       <div className={css.layout}>
         {userEmail && (
           <Paper className={css.form}>
-            <form>
+            <form onSubmit={logoutCallback}>
               <Box mb={2}>
                 <Typography>Logged in as {userEmail}</Typography>
               </Box>
@@ -146,7 +163,18 @@ const Home: NextPage<HomeProps> = props => {
   )
 }
 
-Home.getInitialProps = async () => {
+Home.getInitialProps = async ctx => {
+  let cookieHeader: string | undefined
+  if (ctx.req) {
+    cookieHeader = ctx.req.headers.cookie
+  }
+
+  const session = await getSession(cookieHeader)
+
+  if (session.user) {
+    return { userEmail: session.user.email }
+  }
+
   return {}
 }
 
