@@ -5,7 +5,7 @@ import { Server } from 'http'
 import session from 'express-session'
 import connectRedis from 'connect-redis'
 import moment from 'moment'
-import { NODE_ENV, SESSION_SECRET } from '../config'
+import { NODE_ENV, SESSION_SECRET } from './config'
 import apiRoutes from './api-routes'
 import redis from './redis'
 

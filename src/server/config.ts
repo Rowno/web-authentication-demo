@@ -11,8 +11,6 @@ export const {
 
 const isProd = NODE_ENV === 'production'
 
-export const BASE_URL = isProd ? 'https://rowno-web-authentication-demo.herokuapp.com' : 'http://localhost:3000'
-
 if (isProd) {
   if (SESSION_SECRET === 'test') {
     throw new Error('SESSION_SECRET environment variable not set')

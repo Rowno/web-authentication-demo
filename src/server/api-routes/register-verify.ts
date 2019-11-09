@@ -6,7 +6,7 @@ import jwkToPem from 'jwk-to-pem'
 import joi from '@hapi/joi'
 import { NotFound, BadRequest } from 'http-errors'
 import redis from '../redis'
-import { ALLOWED_ORIGINS } from '../../config'
+import { ALLOWED_ORIGINS } from '../config'
 import { createUser, getUserByEmail } from '../database'
 
 export interface RegisterVerifyResponse {

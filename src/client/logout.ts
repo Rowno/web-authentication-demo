@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-unfetch'
 import { LogoutResponse } from '../server/api-routes/logout'
-import { BASE_URL } from '../config'
+import { BASE_URL } from './config'
 
 export default async function logout(): Promise<LogoutResponse> {
   const logoutRes = await fetch(`${BASE_URL}/api/logout`, { method: 'POST' })

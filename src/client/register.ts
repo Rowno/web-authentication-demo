@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-unfetch'
 import { create, PublicKeyCredentialWithAttestationJSON } from '@github/webauthn-json'
 import { RegisterRequestResponse } from '../server/api-routes/register-request'
-import { BASE_URL } from '../config'
+import { BASE_URL } from './config'
 
 export default async function register(email: string): Promise<void> {
   const requestRes = await fetch(`${BASE_URL}/api/register-request`, {

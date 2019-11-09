@@ -6,7 +6,7 @@ import loginRequest from './login-request'
 import loginVerify from './login-verify'
 import session from './session'
 import logout from './logout'
-import { NODE_ENV } from '../../config'
+import { NODE_ENV } from '../config'
 
 const router = createRouter()
 export default router
@@ -23,7 +23,7 @@ router.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
   let statusCode = 500
   const errorStatusCode = error.statusCode || error.status
 
-  if (error.expose && (errorStatusCode >= 400 && errorStatusCode <= 499)) {
+  if (error.expose && errorStatusCode >= 400 && errorStatusCode <= 499) {
     statusCode = errorStatusCode
     message = error.message
   }

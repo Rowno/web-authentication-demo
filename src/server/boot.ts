@@ -1,6 +1,6 @@
 import { once } from 'lodash'
 import { startServer } from './app'
-import { PORT } from '../config'
+import { PORT } from './config'
 import { Server } from 'http'
 
 let server: Server | undefined

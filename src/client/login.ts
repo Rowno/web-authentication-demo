@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-unfetch'
 import { get, PublicKeyCredentialWithAssertionJSON } from '@github/webauthn-json'
 import { LoginRequestResponse } from '../server/api-routes/login-request'
-import { BASE_URL } from '../config'
+import { BASE_URL } from './config'
 
 export default async function login(email: string): Promise<void> {
   const requestRes = await fetch(`${BASE_URL}/api/login-request`, {
