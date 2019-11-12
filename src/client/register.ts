@@ -23,7 +23,7 @@ export default async function register(email: string): Promise<void> {
       publicKey: {
         challenge: requestResult.challenge,
         rp: {
-          name: 'Test',
+          name: 'Web Authentication Demo',
           id: document.location.hostname
         },
         user: {

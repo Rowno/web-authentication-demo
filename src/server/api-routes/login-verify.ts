@@ -5,7 +5,7 @@ import joi from '@hapi/joi'
 import { NotFound, BadRequest } from 'http-errors'
 import redis from '../redis'
 import { ALLOWED_ORIGINS } from '../config'
-import { getUserByEmail, getKeysByUserId } from '../database'
+import { getUserByEmail, getKeyByUserId } from '../database'
 
 export interface LoginVerifyResponse {
   ok: boolean
@@ -82,8 +82,7 @@ export default async function loginVerify(req: Request, res: Response): Promise<
     throw new NotFound('Challenge not found')
   }
 
-  const keys = await getKeysByUserId(user.id)
-  const key = keys.find(k => k.credential_id === credentialId)
+  const key = await getKeyByUserId(user.id, credentialId)
   if (!key) {
     throw new NotFound('Key not found')
   }

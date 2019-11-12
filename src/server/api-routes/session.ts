@@ -15,14 +15,8 @@ export default async function session(req: Request, res: Response): Promise<void
 
   const userId: string | undefined = req.session!.userId
   if (!userId) {
-    req.session!.regenerate(error => {
-      if (error) {
-        console.error(error)
-      }
-
-      result = {}
-      res.json(result)
-    })
+    result = {}
+    res.json(result)
     return
   }
 

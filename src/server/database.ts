@@ -31,6 +31,10 @@ export async function getKeysByUserId(userId: string): Promise<Key[]> {
   return db.any<Key>(sql`SELECT * FROM keys WHERE user_id = ${userId}`)
 }
 
+export async function getKeyByUserId(userId: string, credentialId: string): Promise<Key | null> {
+  return db.maybeOne<Key>(sql`SELECT * FROM keys WHERE user_id = ${userId} AND credential_id = ${credentialId}`)
+}
+
 interface CreateUserParams {
   userId: string
   email: string
