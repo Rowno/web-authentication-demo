@@ -5,7 +5,7 @@ import { BASE_URL } from './config'
 export default async function getSession(cookieHeader?: string): Promise<SessionResponse> {
   const sessionRes = await fetch(`${BASE_URL}/api/session`, {
     headers: {
-      Cookie: cookieHeader || ''
+      Cookie: cookieHeader ?? ''
     }
   })
 

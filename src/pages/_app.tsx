@@ -9,7 +9,7 @@ export default class MyApp extends App {
   componentDidMount(): void {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side')
-    if (jssStyles !== null && jssStyles.parentNode !== null) {
+    if (jssStyles?.parentNode) {
       jssStyles.parentNode.removeChild(jssStyles)
     }
   }
