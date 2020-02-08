@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { createPool, sql } from 'slonik'
 import { DATABASE_URL } from './config'
 
