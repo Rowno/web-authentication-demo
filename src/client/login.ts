@@ -4,6 +4,7 @@ import { LoginRequestResponse } from '../server/api-routes/login-request'
 import { BASE_URL } from './config'
 
 export default async function login(email: string): Promise<void> {
+  // Request list of credential IDs and challenge token
   const requestRes = await fetch(`${BASE_URL}/api/login-request`, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
@@ -19,6 +20,8 @@ export default async function login(email: string): Promise<void> {
 
   let credential: PublicKeyCredentialWithAssertionJSON
   try {
+    // Ask the browser if it has a credential matching one of the IDs and have it
+    // sign the challenge token using the credential's hardware key
     credential = await get({
       publicKey: {
         challenge: requestResult.challenge,
@@ -26,6 +29,8 @@ export default async function login(email: string): Promise<void> {
           id,
           type: 'public-key'
         })),
+        // Don't require the user to enter a pin code or password to access their hardware key
+        // (user confirmation will still be required)
         userVerification: 'discouraged'
       }
     })
@@ -33,6 +38,7 @@ export default async function login(email: string): Promise<void> {
     throw new Error(error.message)
   }
 
+  // Send the challenge signature to the server for verification to get a session cookie
   const verifyRes = await fetch('/api/login-verify', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },

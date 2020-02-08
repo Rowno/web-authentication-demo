@@ -36,9 +36,13 @@ const paramsSchema = joi
 
 interface Params {
   email: string
+  /** The credentialId that the browser used sign the challenge */
   credentialId: string
+  /** The authenticatorData returned by the browser */
   authenticatorData: string
+  /** The clientDataJSON returned by the browser */
   clientDataJSON: string
+  /** The signature that the browser generated for the challenge and the other data it returned */
   signature: string
 }
 
@@ -47,21 +51,26 @@ const clientDataSchema = joi
   .keys({
     challenge: joi
       .string()
+      // Make sure that the clientDataJSON contain the correct challenge token
+      // (protects against replay attacks)
       .valid(joi.ref('$challenge'))
       .required()
       .error(new Error('Invalid challenge')),
     origin: joi
       .string()
+      // Make sure the request came from one of the whitelisted origins
       .valid(...ALLOWED_ORIGINS)
       .required()
       .error(new Error('Invalid origin')),
     type: joi
       .string()
+      // Make sure it's the right type of request
       .valid('webauthn.get')
       .required()
   })
   .required()
 
+/** Verifies the signature and data returned by the browser and logs in the user */
 export default async function loginVerify(req: Request, res: Response): Promise<void> {
   const {
     email,
@@ -77,11 +86,13 @@ export default async function loginVerify(req: Request, res: Response): Promise<
   }
 
   const challenge = await redis.get(`challenge:${user.id}`)
+  // Make sure the challenge token can't be reused (protects against replay attacks)
   await redis.del(`challenge:${user.id}`)
   if (!challenge) {
     throw new NotFound('Challenge not found')
   }
 
+  // Get the public key associated with the user's credentialId
   const key = await getKeyByUserId(user.id, credentialId)
   if (!key) {
     throw new NotFound('Key not found')
@@ -89,6 +100,7 @@ export default async function loginVerify(req: Request, res: Response): Promise<
 
   const clientData = JSON.parse(base64url.decode(rawClientDataJSON))
 
+  // Verify the clientDataJSON
   joi.assert(clientData, clientDataSchema, {
     allowUnknown: true,
     context: {
@@ -100,10 +112,12 @@ export default async function loginVerify(req: Request, res: Response): Promise<
   hash.update(base64url.toBuffer(rawClientDataJSON))
   const clientDataJSONHash = hash.digest()
 
+  // Combine the data signed by the browser
   const authenticatorData = base64url.toBuffer(rawAuthenticatorData)
   const signedData = Buffer.concat([authenticatorData, clientDataJSONHash])
   const signature = base64url.toBuffer(rawSignature)
 
+  // Verify the signature using the stored public key
   const isValidSignature = crypto
     .createVerify('sha256')
     .update(signedData)
@@ -113,6 +127,7 @@ export default async function loginVerify(req: Request, res: Response): Promise<
     throw new BadRequest(`Invalid signature`)
   }
 
+  // Login the user
   req.session!.userId = user.id
 
   const result: LoginVerifyResponse = { ok: true }

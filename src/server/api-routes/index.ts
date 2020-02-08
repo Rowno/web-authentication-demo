@@ -18,17 +18,19 @@ router.post('/api/login-verify', loginVerify)
 router.get('/api/session', session)
 router.post('/api/logout', logout)
 
+// Catch all error handler
 router.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
   let message = 'Internal server error'
   let statusCode = 500
   const errorStatusCode = error.statusCode || error.status
 
+  // Only return exposable user errors for security reasons
   if (error.expose && errorStatusCode >= 400 && errorStatusCode <= 499) {
     statusCode = errorStatusCode
     message = error.message
   }
 
-  // Only return the error message in development
+  // Always return the error in development
   if (NODE_ENV === 'development' || NODE_ENV === 'test') {
     message = error.message || error
   }

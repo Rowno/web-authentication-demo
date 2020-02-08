@@ -6,7 +6,7 @@ You can play around with a running instance here: https://rowno-web-authenticati
 
 ## Development
 
-Run `docker-compose up -d` to start the database and then run `yarn dev` to start the site in development mode.
+Run `docker-compose up -d` to start the database, run `yarn seed` initialise the database and then run `yarn dev` to start the site in development mode.
 
 To lint the files and test that the site builds, run `yarn lint` and `yarn build` (this will also check that the TypeScript is valid).
 

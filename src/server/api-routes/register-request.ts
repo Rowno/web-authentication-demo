@@ -25,6 +25,7 @@ interface Params {
   email: string
 }
 
+/** Generates a pending user ID and a challenge token for registering */
 export default async function registerRequest(req: Request, res: Response): Promise<void> {
   const { email }: Params = joi.attempt(req.body, paramsSchema)
 
@@ -33,6 +34,9 @@ export default async function registerRequest(req: Request, res: Response): Prom
     throw new BadRequest('User already exists')
   }
 
+  // Because this is a passwordless system, we need to generate a user ID to pass
+  // to the Web Authentication API. It's stored server-side in the user's session
+  // so that user can't control it.
   const pendingUserId = uuidv4()
   const challenge = generateChallenge()
   await redis.set(`challenge:${pendingUserId}`, challenge, 'EX', 300)

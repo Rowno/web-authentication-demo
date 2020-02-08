@@ -12,14 +12,19 @@ import redis from './redis'
 const SessionRedisStore = connectRedis(session)
 
 let nextApp: ReturnType<typeof next> | undefined
+// Run next.js in a separate process during development so that every server-side
+// change doesn't cause webpack to be restarted
 if (NODE_ENV !== 'development') {
   nextApp = next({ dev: false })
 }
 
 const app = express()
+// Trust the x-forwarded-for header set by the load balancer
 app.set('trust proxy', true)
 
+// Set a bunch of security related headers
 app.use(helmet())
+// Setup redis backed session management
 app.use(
   session({
     cookie: {
@@ -32,16 +37,18 @@ app.use(
     resave: false,
     saveUninitialized: false,
     secret: SESSION_SECRET,
-    store: new SessionRedisStore({ prefix: 'session:', client: redis as any }),
+    store: new SessionRedisStore({ prefix: 'session:', client: redis }),
     unset: 'destroy'
   })
 )
 app.use(express.json())
 
+// Mount the API routes
 app.use(apiRoutes)
 
 if (nextApp) {
   const nextRequestHandler = nextApp.getRequestHandler()
+  // Pass all other requests to next.js
   app.all('*', (req, res) => {
     nextRequestHandler(req, res)
   })

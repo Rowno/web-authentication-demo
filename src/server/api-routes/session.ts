@@ -10,6 +10,7 @@ export interface SessionResponse {
   user?: User
 }
 
+/** Returns the user currently logged in */
 export default async function session(req: Request, res: Response): Promise<void> {
   let result: SessionResponse
 
@@ -20,6 +21,7 @@ export default async function session(req: Request, res: Response): Promise<void
     return
   }
 
+  // If the user ID in the session can't be found, logout the user
   const user = await getUserById(userId)
   if (!user) {
     req.session!.regenerate(error => {

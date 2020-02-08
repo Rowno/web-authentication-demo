@@ -24,6 +24,7 @@ interface Params {
   email: string
 }
 
+/** Returns the credential IDs linked to the given email and a challenge token for logging in */
 export default async function loginRequest(req: Request, res: Response): Promise<void> {
   const { email }: Params = joi.attempt(req.body, paramsSchema)
 
@@ -37,6 +38,7 @@ export default async function loginRequest(req: Request, res: Response): Promise
     throw new NotFound('No keys found')
   }
 
+  // Generate and save a random challenge token. This is used to protect against replay attacks.
   const challenge = generateChallenge()
   await redis.set(`challenge:${user.id}`, challenge, 'EX', 300)
 

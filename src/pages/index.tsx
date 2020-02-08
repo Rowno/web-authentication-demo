@@ -169,6 +169,8 @@ Home.getInitialProps = async ctx => {
     cookieHeader = ctx.req.headers.cookie
   }
 
+  // Check if the user is logged in and get the user's details.
+  // Forward the cookie header during server-side rendering
   const session = await getSession(cookieHeader)
 
   if (session.user) {

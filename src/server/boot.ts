@@ -11,6 +11,7 @@ startServer(PORT)
     console.log(`Server listening at http://localhost:${PORT}`)
   })
   .catch(error => {
+    // Server errored during startup so exit the process
     handleUncaught(error, 'unhandledRejection')
     // Leave time for logging / error capture
     setTimeout(() => process.exit(1), 300)
