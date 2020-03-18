@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import uuidv4 from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 import joi from '@hapi/joi'
 import redis from '../redis'
 import generateChallenge from '../generate-challenge'
