@@ -8,7 +8,7 @@ export default async function login(email: string): Promise<void> {
   const requestRes = await fetch(`${BASE_URL}/api/login-request`, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email })
+    body: JSON.stringify({ email }),
   })
 
   if (!requestRes.ok) {
@@ -25,14 +25,14 @@ export default async function login(email: string): Promise<void> {
     credential = await get({
       publicKey: {
         challenge: requestResult.challenge,
-        allowCredentials: requestResult.credentialIds.map(id => ({
+        allowCredentials: requestResult.credentialIds.map((id) => ({
           id,
-          type: 'public-key'
+          type: 'public-key',
         })),
         // Don't require the user to enter a pin code or password to access their hardware key
         // (user confirmation will still be required)
-        userVerification: 'discouraged'
-      }
+        userVerification: 'discouraged',
+      },
     })
   } catch (error) {
     throw new Error(error.message)
@@ -47,8 +47,8 @@ export default async function login(email: string): Promise<void> {
       credentialId: credential.id,
       authenticatorData: credential.response.authenticatorData,
       clientDataJSON: credential.response.clientDataJSON,
-      signature: credential.response.signature
-    })
+      signature: credential.response.signature,
+    }),
   })
 
   if (!verifyRes.ok) {

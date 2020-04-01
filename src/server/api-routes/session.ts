@@ -14,7 +14,7 @@ export interface SessionResponse {
 export default async function session(req: Request, res: Response): Promise<void> {
   let result: SessionResponse
 
-  const userId: string | undefined = req.session!.userId
+  const userId: string | undefined = req.session?.userId
   if (!userId) {
     result = {}
     res.json(result)
@@ -24,7 +24,7 @@ export default async function session(req: Request, res: Response): Promise<void
   // If the user ID in the session can't be found, logout the user
   const user = await getUserById(userId)
   if (!user) {
-    req.session!.regenerate(error => {
+    req.session?.regenerate((error) => {
       if (error) {
         console.error(error)
       }
@@ -38,8 +38,8 @@ export default async function session(req: Request, res: Response): Promise<void
   result = {
     user: {
       id: user.id,
-      email: user.email
-    }
+      email: user.email,
+    },
   }
   res.json(result)
 }

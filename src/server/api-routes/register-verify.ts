@@ -16,18 +16,9 @@ export interface RegisterVerifyResponse {
 const paramsSchema = joi
   .object()
   .keys({
-    email: joi
-      .string()
-      .email()
-      .required(),
-    clientDataJSON: joi
-      .string()
-      .base64({ paddingRequired: false, urlSafe: true })
-      .required(),
-    attestationObject: joi
-      .string()
-      .base64({ paddingRequired: false, urlSafe: true })
-      .required()
+    email: joi.string().email().required(),
+    clientDataJSON: joi.string().base64({ paddingRequired: false, urlSafe: true }).required(),
+    attestationObject: joi.string().base64({ paddingRequired: false, urlSafe: true }).required(),
   })
   .required()
 
@@ -57,17 +48,14 @@ const clientDataSchema = joi
       .string()
       // Make sure it's the right type of request
       .valid('webauthn.create')
-      .required()
+      .required(),
   })
   .required()
 
 const attestationSchema = joi
   .object()
   .keys({
-    authData: joi
-      .binary()
-      .min(56)
-      .required()
+    authData: joi.binary().min(56).required(),
   })
   .required()
 
@@ -85,7 +73,7 @@ export default async function registerVerify(req: Request, res: Response): Promi
   }
 
   // Only get the pendingUserId from the session so that the user can't control it
-  const pendingUserId: string | undefined = req.session!.pendingUserId
+  const pendingUserId: string | undefined = req.session?.pendingUserId
   if (!pendingUserId) {
     throw new BadRequest('Call /api/register-request first')
   }
@@ -103,8 +91,8 @@ export default async function registerVerify(req: Request, res: Response): Promi
   joi.assert(clientData, clientDataSchema, {
     allowUnknown: true,
     context: {
-      challenge
-    }
+      challenge,
+    },
   })
 
   const attestation = cbor.decode(base64url.toBuffer(attestationObject))
@@ -125,7 +113,7 @@ export default async function registerVerify(req: Request, res: Response): Promi
     userId: pendingUserId,
     email,
     credentialId,
-    publicKey: pemPublicKey
+    publicKey: pemPublicKey,
   })
 
   // Login the newly registered user

@@ -14,10 +14,7 @@ export interface RegisterRequestResponse {
 const paramsSchema = joi
   .object()
   .keys({
-    email: joi
-      .string()
-      .email()
-      .required()
+    email: joi.string().email().required(),
   })
   .required()
 
@@ -44,7 +41,7 @@ export default async function registerRequest(req: Request, res: Response): Prom
 
   const result: RegisterRequestResponse = {
     id: pendingUserId,
-    challenge
+    challenge,
   }
   res.json(result)
 }

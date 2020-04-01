@@ -1,7 +1,7 @@
 import { sql } from 'slonik'
 import { db } from '../src/server/database'
 
-db.transaction(async connection => {
+db.transaction(async (connection) => {
   await connection.query(sql`
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
@@ -21,7 +21,7 @@ db.transaction(async connection => {
       UNIQUE(user_id, credential_id)
     );
   `)
-}).catch(error => {
+}).catch((error) => {
   process.exitCode = 1
   console.error(error)
 })

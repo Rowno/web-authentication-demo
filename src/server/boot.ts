@@ -6,11 +6,11 @@ import { Server } from 'http'
 let server: Server | undefined
 
 startServer(PORT)
-  .then(s => {
+  .then((s) => {
     server = s
     console.log(`Server listening at http://localhost:${PORT}`)
   })
-  .catch(error => {
+  .catch((error) => {
     // Server errored during startup so exit the process
     handleUncaught(error, 'unhandledRejection')
     // Leave time for logging / error capture
@@ -43,11 +43,11 @@ function handleUncaught(error: any, crashType: string): void {
   console.error('😱  Server crashed', error)
 }
 
-process.on('uncaughtException', error => {
+process.on('uncaughtException', (error) => {
   handleUncaught(error, 'uncaughtException')
   gracefulShutdown(1)
 })
-process.on('unhandledRejection', error => {
+process.on('unhandledRejection', (error) => {
   handleUncaught(error, 'unhandledRejection')
   gracefulShutdown(1)
 })

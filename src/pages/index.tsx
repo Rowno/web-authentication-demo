@@ -11,35 +11,35 @@ const useStyles = makeStyles({
   layout: {
     display: 'flex',
     flexWrap: 'wrap',
-    margin: '16px'
+    margin: '16px',
   },
   form: {
     minWidth: '300px',
     padding: '16px',
-    margin: '8px'
+    margin: '8px',
   },
   input: {
-    marginBottom: '16px'
-  }
+    marginBottom: '16px',
+  },
 })
 
 interface HomeProps {
   userEmail?: string
 }
 
-const Home: NextPage<HomeProps> = props => {
+const Home: NextPage<HomeProps> = (props) => {
   const [userEmail, setUserEmail] = useState(props.userEmail)
   const [registerEmail, setRegisterEmail] = useState('')
   const [loginEmail, setLoginEmail] = useState('')
   const { enqueueSnackbar } = useSnackbar()
   const css = useStyles()
 
-  const handleRegisterEmailChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(e => {
+  const handleRegisterEmailChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>((e) => {
     setRegisterEmail(e.target.value)
   }, [])
 
   const registerCallback = useCallback<React.FormEventHandler<HTMLFormElement>>(
-    e => {
+    (e) => {
       e.preventDefault()
 
       register(registerEmail)
@@ -47,19 +47,19 @@ const Home: NextPage<HomeProps> = props => {
           setUserEmail(registerEmail)
           enqueueSnackbar('Register success', { variant: 'success' })
         })
-        .catch(error => {
+        .catch((error) => {
           enqueueSnackbar(error.message, { variant: 'error' })
         })
     },
     [enqueueSnackbar, registerEmail]
   )
 
-  const handleLoginEmailChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(e => {
+  const handleLoginEmailChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>((e) => {
     setLoginEmail(e.target.value)
   }, [])
 
   const loginCallback = useCallback<React.FormEventHandler<HTMLFormElement>>(
-    e => {
+    (e) => {
       e.preventDefault()
 
       login(loginEmail)
@@ -67,7 +67,7 @@ const Home: NextPage<HomeProps> = props => {
           setUserEmail(loginEmail)
           enqueueSnackbar('Login success', { variant: 'success' })
         })
-        .catch(error => {
+        .catch((error) => {
           enqueueSnackbar(error.message, { variant: 'error' })
         })
     },
@@ -75,14 +75,14 @@ const Home: NextPage<HomeProps> = props => {
   )
 
   const logoutCallback = useCallback<React.FormEventHandler<HTMLFormElement>>(
-    e => {
+    (e) => {
       e.preventDefault()
 
       logout()
         .then(() => {
           window.location.reload()
         })
-        .catch(error => {
+        .catch((error) => {
           enqueueSnackbar(error.message, { variant: 'error' })
         })
     },
@@ -163,7 +163,7 @@ const Home: NextPage<HomeProps> = props => {
   )
 }
 
-Home.getInitialProps = async ctx => {
+Home.getInitialProps = async (ctx) => {
   let cookieHeader: string | undefined
   if (ctx.req) {
     cookieHeader = ctx.req.headers.cookie

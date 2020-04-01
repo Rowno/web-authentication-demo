@@ -22,7 +22,7 @@ export default class MyApp extends App {
         <Head>
           <title>Web Authentication Demo</title>
         </Head>
-        <SnackbarProvider action={snackbarKey => <SnackbarCloseButton snackbarKey={snackbarKey} />}>
+        <SnackbarProvider action={(snackbarKey) => <SnackbarCloseButton snackbarKey={snackbarKey} />}>
           <CssBaseline />
           <Component {...pageProps} />
         </SnackbarProvider>

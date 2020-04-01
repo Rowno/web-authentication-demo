@@ -13,10 +13,7 @@ export interface LoginRequestResponse {
 const paramsSchema = joi
   .object()
   .keys({
-    email: joi
-      .string()
-      .email()
-      .required()
+    email: joi.string().email().required(),
   })
   .required()
 
@@ -43,8 +40,8 @@ export default async function loginRequest(req: Request, res: Response): Promise
   await redis.set(`challenge:${user.id}`, challenge, 'EX', 300)
 
   const result: LoginRequestResponse = {
-    credentialIds: keys.map(key => key.credential_id),
-    challenge
+    credentialIds: keys.map((key) => key.credential_id),
+    challenge,
   }
   res.json(result)
 }

@@ -11,5 +11,5 @@ export default async function logout(): Promise<LogoutResponse> {
     throw new Error(errorResult.error)
   }
 
-  return logoutRes.json()
+  return logoutRes.json() as Promise<LogoutResponse>
 }

@@ -42,7 +42,7 @@ interface CreateUserParams {
 }
 
 export async function createUser({ userId, email, credentialId, publicKey }: CreateUserParams): Promise<void> {
-  await db.transaction(async transaction => {
+  await db.transaction(async (transaction) => {
     await transaction.query(sql`
       INSERT INTO users
         (id, email)

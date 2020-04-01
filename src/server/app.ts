@@ -31,14 +31,14 @@ app.use(
       httpOnly: true,
       maxAge: moment.duration(1, 'week').asMilliseconds(),
       sameSite: 'lax',
-      secure: NODE_ENV === 'production'
+      secure: NODE_ENV === 'production',
     },
     name: 'session_token',
     resave: false,
     saveUninitialized: false,
     secret: SESSION_SECRET,
     store: new SessionRedisStore({ prefix: 'session:', client: redis }),
-    unset: 'destroy'
+    unset: 'destroy',
   })
 )
 app.use(express.json())
@@ -59,7 +59,7 @@ export async function startServer(port: number): Promise<Server> {
     await nextApp.prepare()
   }
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const server = app.listen(port, () => {
       resolve(server)
     })

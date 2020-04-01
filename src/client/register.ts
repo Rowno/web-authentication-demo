@@ -8,7 +8,7 @@ export default async function register(email: string): Promise<void> {
   const requestRes = await fetch(`${BASE_URL}/api/register-request`, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email })
+    body: JSON.stringify({ email }),
   })
 
   if (!requestRes.ok) {
@@ -29,12 +29,12 @@ export default async function register(email: string): Promise<void> {
           // Website name
           name: 'Web Authentication Demo',
           // The origin the credential should be scoped to
-          id: document.location.hostname
+          id: document.location.hostname,
         },
         user: {
           id: requestResult.id,
           name: email,
-          displayName: email
+          displayName: email,
         },
         // Desired credential features
         // -7 indicates the elliptic curve algorithm ECDSA with SHA-256
@@ -43,11 +43,11 @@ export default async function register(email: string): Promise<void> {
         authenticatorSelection: {
           // Don't require the user to enter a pin code or password to access
           // their hardware key (user confirmation will still be required)
-          userVerification: 'discouraged'
+          userVerification: 'discouraged',
         },
         // Don't require details about hardware key (can contain PII)
-        attestation: 'none'
-      }
+        attestation: 'none',
+      },
     })
   } catch (error) {
     throw new Error(error.message)
@@ -61,8 +61,8 @@ export default async function register(email: string): Promise<void> {
     body: JSON.stringify({
       email,
       clientDataJSON: credential.response.clientDataJSON,
-      attestationObject: credential.response.attestationObject
-    })
+      attestationObject: credential.response.attestationObject,
+    }),
   })
 
   if (!verifyRes.ok) {

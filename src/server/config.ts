@@ -7,7 +7,7 @@ export const {
   NODE_ENV = 'development',
   REDIS_URL,
   DATABASE_URL = 'postgres://postgres@localhost/postgres',
-  SESSION_SECRET = 'test'
+  SESSION_SECRET = 'test',
 } = process.env
 
 if (NODE_ENV === 'production') {

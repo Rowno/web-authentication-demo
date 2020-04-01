@@ -6,8 +6,8 @@ export default async function getSession(cookieHeader?: string): Promise<Session
   const sessionRes = await fetch(`${BASE_URL}/api/session`, {
     headers: {
       // Forward the cookie header during server-side rendering
-      Cookie: cookieHeader ?? ''
-    }
+      Cookie: cookieHeader ?? '',
+    },
   })
 
   if (!sessionRes.ok) {
@@ -15,5 +15,5 @@ export default async function getSession(cookieHeader?: string): Promise<Session
     throw new Error(errorResult.error)
   }
 
-  return sessionRes.json()
+  return sessionRes.json() as Promise<SessionResponse>
 }

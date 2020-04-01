@@ -14,23 +14,11 @@ export interface LoginVerifyResponse {
 const paramsSchema = joi
   .object()
   .keys({
-    email: joi
-      .string()
-      .email()
-      .required(),
+    email: joi.string().email().required(),
     credentialId: joi.string().required(),
-    authenticatorData: joi
-      .string()
-      .base64({ paddingRequired: false, urlSafe: true })
-      .required(),
-    clientDataJSON: joi
-      .string()
-      .base64({ paddingRequired: false, urlSafe: true })
-      .required(),
-    signature: joi
-      .string()
-      .base64({ paddingRequired: false, urlSafe: true })
-      .required()
+    authenticatorData: joi.string().base64({ paddingRequired: false, urlSafe: true }).required(),
+    clientDataJSON: joi.string().base64({ paddingRequired: false, urlSafe: true }).required(),
+    signature: joi.string().base64({ paddingRequired: false, urlSafe: true }).required(),
   })
   .required()
 
@@ -66,7 +54,7 @@ const clientDataSchema = joi
       .string()
       // Make sure it's the right type of request
       .valid('webauthn.get')
-      .required()
+      .required(),
   })
   .required()
 
@@ -77,7 +65,7 @@ export default async function loginVerify(req: Request, res: Response): Promise<
     credentialId,
     authenticatorData: rawAuthenticatorData,
     clientDataJSON: rawClientDataJSON,
-    signature: rawSignature
+    signature: rawSignature,
   }: Params = joi.attempt(req.body, paramsSchema)
 
   const user = await getUserByEmail(email)
@@ -104,8 +92,8 @@ export default async function loginVerify(req: Request, res: Response): Promise<
   joi.assert(clientData, clientDataSchema, {
     allowUnknown: true,
     context: {
-      challenge
-    }
+      challenge,
+    },
   })
 
   const hash = crypto.createHash('sha256')
@@ -118,10 +106,7 @@ export default async function loginVerify(req: Request, res: Response): Promise<
   const signature = base64url.toBuffer(rawSignature)
 
   // Verify the signature using the stored public key
-  const isValidSignature = crypto
-    .createVerify('sha256')
-    .update(signedData)
-    .verify(key.public_key, signature)
+  const isValidSignature = crypto.createVerify('sha256').update(signedData).verify(key.public_key, signature)
 
   if (!isValidSignature) {
     throw new BadRequest(`Invalid signature`)
