@@ -49,8 +49,8 @@ app.use(apiRoutes)
 if (nextApp) {
   const nextRequestHandler = nextApp.getRequestHandler()
   // Pass all other requests to next.js
-  app.all('*', (req, res) => {
-    nextRequestHandler(req, res)
+  app.all('*', (req, res, next) => {
+    nextRequestHandler(req, res).catch(next)
   })
 }
 

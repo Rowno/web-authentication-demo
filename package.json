@@ -64,21 +64,21 @@
     "@types/react-dom": "^16.9.5",
     "@types/slonik": "^22.1.2",
     "@types/uuid": "^8.3.0",
-    "@typescript-eslint/eslint-plugin": "^2.19.0",
-    "@typescript-eslint/parser": "^2.19.0",
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
     "concurrently": "^5.1.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.0",
-    "eslint-config-xo": "^0.29.1",
+    "eslint": "^7.9.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-config-xo": "^0.32.1",
     "eslint-config-xo-react": "^0.23.0",
-    "eslint-config-xo-typescript": "^0.27.0",
+    "eslint-config-xo-typescript": "^0.33.0",
     "eslint-plugin-react": "^7.18.3",
-    "eslint-plugin-react-hooks": "^3.0.0",
+    "eslint-plugin-react-hooks": "^4.1.2",
     "http-proxy": "^1.18.1",
     "nodemon": "^2.0.2",
     "prettier": "^2.0.2",
-    "ts-node": "^8.6.2",
-    "typescript": "^3.7.4"
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
   },
   "eslintIgnore": [
     "/.next/",
@@ -101,10 +101,7 @@
       "browser": true
     },
     "rules": {
-      "@typescript-eslint/prefer-readonly-parameter-types": "off",
-      "@typescript-eslint/no-unsafe-member-access": "off",
-      "@typescript-eslint/no-unsafe-call": "off",
-      "prefer-destructuring": "off",
+      "@typescript-eslint/no-implicit-any-catch": "off",
       "react/prop-types": "off"
     }
   },

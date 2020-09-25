@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 })
 
 interface HomeProps {
-  userEmail?: string
+  userEmail: string | null
 }
 
 const Home: NextPage<HomeProps> = (props) => {
@@ -177,7 +177,7 @@ Home.getInitialProps = async (ctx) => {
     return { userEmail: session.user.email }
   }
 
-  return {}
+  return { userEmail: null }
 }
 
 export default Home
