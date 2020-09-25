@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-unfetch'
 import { LogoutResponse } from '../server/api-routes/logout'
 import { BASE_URL } from './config'
 

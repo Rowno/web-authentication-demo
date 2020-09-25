@@ -21,7 +21,10 @@ export default class MyApp extends App {
       <>
         <Head>
           <title>Web Authentication Demo</title>
+          <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1" />
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
         </Head>
+
         <SnackbarProvider action={(snackbarKey) => <SnackbarCloseButton snackbarKey={snackbarKey} />}>
           <>
             <CssBaseline />

@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-unfetch'
 import { SessionResponse } from '../server/api-routes/session'
 import { BASE_URL } from './config'
 

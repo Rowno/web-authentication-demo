@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-unfetch'
 import { create, PublicKeyCredentialWithAttestationJSON } from '@github/webauthn-json'
 import { RegisterRequestResponse } from '../server/api-routes/register-request'
 import { BASE_URL } from './config'
