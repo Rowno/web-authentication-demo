@@ -24,7 +24,7 @@
     "node": "^12"
   },
   "dependencies": {
-    "@github/webauthn-json": "^0.4.1",
+    "@github/webauthn-json": "^0.5.6",
     "@hapi/joi": "^17.1.1",
     "@material-ui/core": "^4.9.1",
     "@material-ui/icons": "^4.9.1",
@@ -42,6 +42,7 @@
     "lodash": "^4.17.19",
     "moment": "^2.24.0",
     "next": "^9.2.1",
+    "next-transpile-modules": "^4.1.0",
     "notistack": "^1.0.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
