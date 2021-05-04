@@ -6,6 +6,7 @@ export const ALLOWED_ORIGINS = ['http://localhost:3000', 'https://rowno-web-auth
 export const {
   NODE_ENV = 'development',
   REDIS_URL,
+  REDIS_TLS_URL,
   DATABASE_URL = 'postgres://postgres@localhost/postgres',
   SESSION_SECRET = 'test',
 } = process.env
