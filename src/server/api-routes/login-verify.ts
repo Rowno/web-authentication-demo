@@ -113,7 +113,7 @@ export default async function loginVerify(req: Request, res: Response): Promise<
   }
 
   // Login the user
-  req.session!.userId = user.id
+  req.session.userId = user.id
 
   const result: LoginVerifyResponse = { ok: true }
   res.json(result)

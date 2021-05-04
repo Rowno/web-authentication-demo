@@ -73,7 +73,7 @@ export default async function registerVerify(req: Request, res: Response): Promi
   }
 
   // Only get the pendingUserId from the session so that the user can't control it
-  const pendingUserId: string | undefined = req.session?.pendingUserId
+  const pendingUserId = req.session?.pendingUserId
   if (!pendingUserId) {
     throw new BadRequest('Call /api/register-request first')
   }
@@ -117,8 +117,8 @@ export default async function registerVerify(req: Request, res: Response): Promi
   })
 
   // Login the newly registered user
-  req.session!.userId = pendingUserId
-  delete req.session!.pendingUserId
+  req.session.userId = pendingUserId
+  delete req.session.pendingUserId
 
   const result: RegisterVerifyResponse = { ok: true }
   res.json(result)

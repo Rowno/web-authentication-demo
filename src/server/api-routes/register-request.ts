@@ -37,7 +37,7 @@ export default async function registerRequest(req: Request, res: Response): Prom
   const pendingUserId = uuidv4()
   const challenge = generateChallenge()
   await redis.set(`challenge:${pendingUserId}`, challenge, 'EX', 300)
-  req.session!.pendingUserId = pendingUserId
+  req.session.pendingUserId = pendingUserId
 
   const result: RegisterRequestResponse = {
     id: pendingUserId,

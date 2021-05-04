@@ -14,7 +14,7 @@ export interface SessionResponse {
 export default async function session(req: Request, res: Response): Promise<void> {
   let result: SessionResponse
 
-  const userId: string | undefined = req.session?.userId
+  const userId = req.session?.userId
   if (!userId) {
     result = {}
     res.json(result)
