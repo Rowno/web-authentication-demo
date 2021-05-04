@@ -1,5 +1,5 @@
 import { createPool, sql } from 'slonik'
-import { DATABASE_URL } from './config'
+import { DATABASE_URL, NODE_ENV } from './config'
 
 export interface User {
   id: string
@@ -16,7 +16,7 @@ export interface Key {
   created_at: number
 }
 
-export const db = createPool(DATABASE_URL)
+export const db = createPool(NODE_ENV === 'production' ? DATABASE_URL + '?ssl=1' : DATABASE_URL)
 
 export async function getUserById(userId: string): Promise<User | null> {
   return db.maybeOne<User>(sql`SELECT * FROM users WHERE id = ${userId}`)
