@@ -15,7 +15,8 @@
     "jsx": "preserve",
     "allowJs": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "noUncheckedIndexedAccess": true
   },
   "exclude": ["node_modules", "dist", ".next"],
   "include": ["next-env.d.ts", "next.config.js", "**/*.ts", "**/*.tsx"]
