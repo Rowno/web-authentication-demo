@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import crypto from 'crypto'
 import base64url from 'base64url'
-import joi from '@hapi/joi'
+import joi from 'joi'
 import { NotFound, BadRequest } from 'http-errors'
 import redis from '../redis'
 import { ALLOWED_ORIGINS } from '../config'

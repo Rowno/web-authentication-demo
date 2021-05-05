@@ -2,12 +2,14 @@ import { createPool, sql } from 'slonik'
 import { DATABASE_URL, NODE_ENV } from './config'
 
 export interface User {
+  [k: string]: string | number
   id: string
   email: string
   created_at: number
 }
 
 export interface Key {
+  [k: string]: string | number
   id: string
   user_id: string
   credential_id: string
@@ -26,7 +28,7 @@ export async function getUserByEmail(userEmail: string): Promise<User | null> {
   return db.maybeOne<User>(sql`SELECT * FROM users WHERE email = ${userEmail}`)
 }
 
-export async function getKeysByUserId(userId: string): Promise<Key[]> {
+export async function getKeysByUserId(userId: string): Promise<readonly Key[]> {
   return db.any<Key>(sql`SELECT * FROM keys WHERE user_id = ${userId}`)
 }
 

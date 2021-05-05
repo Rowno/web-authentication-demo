@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import joi from '@hapi/joi'
+import joi from 'joi'
 import { NotFound } from 'http-errors'
 import redis from '../redis'
 import generateChallenge from '../generate-challenge'

@@ -53,6 +53,10 @@ process.on('unhandledRejection', (error) => {
 })
 
 // Termination signal sent by Docker on stop
-process.on('SIGTERM', () => gracefulShutdown(0))
+process.on('SIGTERM', () => {
+  gracefulShutdown(0)
+})
 // Interrupt signal sent by Ctrl+C
-process.on('SIGINT', () => gracefulShutdown(0))
+process.on('SIGINT', () => {
+  gracefulShutdown(0)
+})

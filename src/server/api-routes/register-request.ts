@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
-import joi from '@hapi/joi'
+import joi from 'joi'
 import redis from '../redis'
 import generateChallenge from '../generate-challenge'
 import { getUserByEmail } from '../database'

@@ -44,7 +44,11 @@ const SnackbarCloseButton: FunctionComponent<SnackbarCloseButtonProps> = ({ snac
   const { closeSnackbar } = useSnackbar()
 
   return (
-    <IconButton onClick={() => closeSnackbar(snackbarKey)}>
+    <IconButton
+      onClick={() => {
+        closeSnackbar(snackbarKey)
+      }}
+    >
       <CloseIcon />
     </IconButton>
   )
